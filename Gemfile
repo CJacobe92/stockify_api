@@ -43,6 +43,7 @@ group :development, :test do
   gem "factory_bot_rails", "~> 6.2"
   gem "simplecov", "~> 0.22.0"
   gem "shoulda-matchers", "~> 5.3"
+  gem "rails-controller-testing"
 end
 
 group :development do
@@ -52,3 +53,5 @@ end
 
 
 
+
+gem "jwt", "~> 2.7"

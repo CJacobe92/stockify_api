@@ -6,4 +6,13 @@ FactoryBot.define do
     password {'password'}
     password_confirmation {'password'}
   end
+
+  factory :incorrect_user, class: 'User' do
+    sequence(:firstname) {" "}
+    sequence(:lastname) {" "}
+    sequence(:email) { "not_a_valid_email"}
+    password {'not_a_valid_password'}
+    password_confirmation {'not_a_valid_password_confirmation'}
+  end
 end
+
