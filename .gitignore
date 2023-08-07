@@ -33,3 +33,5 @@
 /config/credentials/testing.key
 
 /config/credentials/production.key
+
+/config/credentials/test.key

@@ -1,6 +1,9 @@
-class Api::V1::UsersController < ApplicationController
+require './lib/token_helper'
+require './lib/headers_helper'
 
-  before_action :set_user, except: [:index, :create]
+class Api::V1::UsersController < ApplicationController
+  include TokenHelper
+  include HeadersHelper
 
   def index
     @users = User.all
@@ -11,6 +14,8 @@ class Api::V1::UsersController < ApplicationController
     @user = User.create(user_params)
 
     if @user.save
+      token = encode_token(user_id: @user.id)
+      response_headers(@user, token)
       render 'create', status: :created
     else 
       render 'create', status: :unprocessable_entity
@@ -31,16 +36,12 @@ class Api::V1::UsersController < ApplicationController
 
   def destroy
     return unless @current_user.destroy
-    render json: 'User deleted', status: :ok
+    render json: 'User deleted', status: :no_content
   end
 
   private
 
   def user_params
     params.require(:user).permit(:firstname, :lastname, :email, :password, :password_confirmation)
-  end
-
-  def set_user
-    @current_user ||= User.find(params[:id])
   end
 end

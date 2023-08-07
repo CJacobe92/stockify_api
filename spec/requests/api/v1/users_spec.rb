@@ -2,13 +2,15 @@ require 'rails_helper'
 
 RSpec.describe "Api::V1::Users", type: :request do
 
+  let!(:user){create(:user)}
+
   describe 'GET /index' do
     context 'with correct authorization' do
-      let!(:users){create_list(:user, 10)}
 
       before do
-        users
-        get '/api/v1/users'
+        create_list(:user, 9)
+        get '/api/v1/users', headers: { 'Authorization' => header(user_id: user.id) }
+
       end
 
       it 'returns a the correct number of users' do
@@ -31,8 +33,10 @@ RSpec.describe "Api::V1::Users", type: :request do
 
   describe 'POST /create' do
     context 'with valid user params' do
+      let(:user_attributes) { attributes_for(:user) }
+
       before do
-        post '/api/v1/users', params: {user: attributes_for(:user)}
+        post '/api/v1/users', params: { user: user_attributes }
       end
 
       it 'returns a 201 status' do
@@ -45,6 +49,18 @@ RSpec.describe "Api::V1::Users", type: :request do
 
       it 'returns the create json with the expected keys' do 
         assert_user_keys(json['data'])
+      end
+
+      it 'returns authorization header' do
+        expect(response.headers['Authorization']).to match(/^Bearer .+/)
+      end
+
+      it 'returns X-REQUEST-ID header' do
+        expect(response.headers).to include('X-REQUEST-ID')
+      end
+
+      it 'returns a stockify client header' do
+        expect(response.headers['client']).to include('stockify')
       end
     end
 
@@ -62,12 +78,10 @@ RSpec.describe "Api::V1::Users", type: :request do
 
   describe 'GET /show' do
     context 'with correct authorization' do
-      
-      let!(:user){create(:user)}
 
       before do
         user
-        get "/api/v1/users/#{user.id}"
+        get "/api/v1/users/#{user.id}", headers: { 'Authorization' => header(user_id: user.id) }
       end
 
       it 'returns a 200 status' do
@@ -87,11 +101,11 @@ RSpec.describe "Api::V1::Users", type: :request do
   describe 'PATCH /update' do
     context 'with correct authorization' do
 
-      let!(:user){create(:user)}
-      updated_user_params = {email: 'john.weak@example.com'}
+      
 
       before do
-        patch "/api/v1/users/#{user.id}", params: {user: updated_user_params}
+        updated_user_params = {email: 'john.weak@example.com'}
+        patch "/api/v1/users/#{user.id}", params: {user: updated_user_params}, headers: { 'Authorization' => header(user_id: user.id) }
       end
 
       it 'returns a 200 status' do
@@ -111,17 +125,16 @@ RSpec.describe "Api::V1::Users", type: :request do
   describe 'DELETE /destroy' do
     context 'with correct authorization' do
 
-      let!(:user){create(:user)}
-
       before do
-        delete "/api/v1/users/#{user.id}"
+        delete "/api/v1/users/#{user.id}", headers: { 'Authorization' => header(user_id: user.id) }
       end
 
-      it 'returns a 200 status' do
-        expect(response).to have_http_status(:ok)
+      it 'returns a 204 status' do
+        expect(response).to have_http_status(:no_content)
       end
     end
   end
+
   # Helper methods
 
   def assert_users_keys(data)
