@@ -14,6 +14,7 @@ class Api::V1::UsersController < ApplicationController
     @user = User.create(user_params)
 
     if @user.save
+      UserMailer.welcome_email(@user).deliver_now
       token = encode_token(user_id: @user.id)
       response_headers(@user, token)
       render 'create', status: :created

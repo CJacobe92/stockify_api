@@ -2,7 +2,7 @@ require './lib/token_helper'
 
 class ApplicationController < ActionController::API
   include TokenHelper
-  before_action :authenticate, except: [:create]
+  before_action :authenticate, except: [:create, :login, :activate, :password_reset]
 
   def authenticate
     header = request.headers['Authorization']

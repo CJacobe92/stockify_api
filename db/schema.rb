@@ -19,7 +19,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_07_084200) do
     t.string "lastname"
     t.string "email"
     t.string "password_digest"
+    t.boolean "activated"
     t.string "token"
+    t.string "reset_token"
+    t.string "activation_token"
     t.string "secret_key"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
