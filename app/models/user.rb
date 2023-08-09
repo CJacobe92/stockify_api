@@ -1,6 +1,5 @@
 class User < ApplicationRecord
     has_secure_password
-
     # validations
 
     validates :firstname, presence: true, on: :create
