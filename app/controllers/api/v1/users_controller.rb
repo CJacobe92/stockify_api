@@ -14,14 +14,13 @@ class Api::V1::UsersController < ApplicationController
     @user = User.create(user_params)
 
     if @user.save
-      UserMailer.welcome_email(@user).deliver_now
+      UserMailer.welcome_email(@user).deliver_later
       token = encode_token(user_id: @user.id)
       response_headers(@user, token)
       render 'create', status: :created
     else 
       render 'create', status: :unprocessable_entity
     end
-
   end
 
   def show
@@ -29,7 +28,6 @@ class Api::V1::UsersController < ApplicationController
     render 'show', status: :ok
   end
 
-  
   def update
     return unless @current_user.update(user_params)
     render 'update', status: :ok

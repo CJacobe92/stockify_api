@@ -10,9 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_07_084200) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_09_095418) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "administrators", force: :cascade do |t|
+    t.string "firstname"
+    t.string "lastname"
+    t.string "email"
+    t.string "password_digest"
+    t.string "token"
+    t.string "reset_token"
+    t.string "otp_secret_key"
+    t.boolean "otp_enabled", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "firstname"
@@ -23,7 +36,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_07_084200) do
     t.string "token"
     t.string "reset_token"
     t.string "activation_token"
-    t.string "secret_key"
+    t.string "otp_secret_key"
+    t.boolean "otp_enabled", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

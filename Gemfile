@@ -55,3 +55,7 @@ end
 
 
 gem "jwt", "~> 2.7"
+
+gem "rotp", "~> 6.2"
+
+gem "rqrcode", "~> 2.2"
