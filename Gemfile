@@ -44,6 +44,7 @@ group :development, :test do
   gem "simplecov", "~> 0.22.0"
   gem "shoulda-matchers", "~> 5.3"
   gem "rails-controller-testing"
+  gem "sidekiq"
 end
 
 group :development do

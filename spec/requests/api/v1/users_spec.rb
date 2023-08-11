@@ -1,24 +1,29 @@
 require 'rails_helper'
+require 'sidekiq/testing'
 
 RSpec.describe "Api::V1::Users", type: :request do
+  include ActiveJob::TestHelper 
 
   let!(:user){create(:user)}
+  let!(:other_user){create(:user)}
+  let!(:admin){create(:admin)}
 
   describe 'GET /index' do
-    context 'with correct authorization' do
+    context 'with correct administrator authorization' do
 
       before do
-        create_list(:user, 9)
-        get '/api/v1/users', headers: { 'Authorization' => header(user_id: user.id) }
+        create_list(:user, 8)
+        get '/api/v1/users', headers: { 'Authorization' => header({id: admin.id, account: 'admin'}) }
 
       end
 
-      it 'returns a the correct number of users' do
+      it 'returns a the correct number of users to view for the administrator' do
         expect(json['data'].size).to eq(10)
       end
 
       it 'returns http status of 200' do
-        expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status(:ok) 
+        
       end
 
       it 'renders the view template' do
@@ -36,12 +41,19 @@ RSpec.describe "Api::V1::Users", type: :request do
       let(:user_attributes) { attributes_for(:user) }
 
       before do
-        post '/api/v1/users', params: { user: user_attributes }
+        perform_enqueued_jobs do
+          post '/api/v1/users', params: { user: user_attributes }
+        end
       end
 
       it 'returns a 201 status' do
         expect(response).to have_http_status(:created)
       end
+
+      it 'sends welcome email' do
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
+      end 
+      
 
       it 'renders the view template' do
         expect(response).to render_template('api/v1/users/create')
@@ -77,11 +89,43 @@ RSpec.describe "Api::V1::Users", type: :request do
   end
 
   describe 'GET /show' do
-    context 'with correct authorization' do
+    context 'with correct user authorization' do
 
       before do
-        user
-        get "/api/v1/users/#{user.id}", headers: { 'Authorization' => header(user_id: user.id) }
+        get "/api/v1/users/#{user.id}", headers: { 'Authorization' => header({id: user.id, account: 'user'}) }
+      end
+
+      it 'returns a 200 status' do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'renders the view template' do
+        expect(response).to render_template('api/v1/users/show')
+      end
+
+      it 'returns the show json with the expected keys' do 
+        assert_user_keys(json['data'])
+      end
+    end
+
+    context 'with incorrect user resource access' do
+      before do
+        get "/api/v1/users/#{user.id}", headers: { 'Authorization' => header({id: other_user.id, account: 'user'}) }
+      end
+
+      it 'returns a 401 status' do
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns an error message' do
+        expect(json['error']).to include('Unauthorized resource access')
+      end
+    end
+
+    context 'with correct admin authorization' do
+
+      before do
+        get "/api/v1/users/#{user.id}", headers: { 'Authorization' => header({id: admin.id, account: 'admin'}) }
       end
 
       it 'returns a 200 status' do
@@ -100,12 +144,43 @@ RSpec.describe "Api::V1::Users", type: :request do
 
   describe 'PATCH /update' do
     context 'with correct authorization' do
-
-      
-
       before do
         updated_user_params = {email: 'john.weak@example.com'}
-        patch "/api/v1/users/#{user.id}", params: {user: updated_user_params}, headers: { 'Authorization' => header(user_id: user.id) }
+        patch "/api/v1/users/#{user.id}", params: {user: updated_user_params}, headers: { 'Authorization' => header({id: user.id, account: 'user'}) }
+      end
+
+      it 'returns a 200 status' do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'renders the view template' do
+        expect(response).to render_template('api/v1/users/update')
+      end
+
+      it 'returns the show json with the expected keys' do 
+        assert_user_keys(json['data'])
+      end
+    end
+
+    context 'with incorrect user resource access' do
+      before do
+        updated_user_params = {email: 'john.weak@example.com'}
+        patch "/api/v1/users/#{user.id}", params: {user: updated_user_params}, headers: { 'Authorization' => header({id: other_user.id, account: 'user'}) }
+      end
+
+      it 'returns a 401 status' do
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns an error message' do
+        expect(json['error']).to include('Unauthorized resource access')
+      end
+    end
+
+    context 'with correct admin authorization' do
+      before do
+        updated_user_params = {email: 'john.weak@example.com'}
+        patch "/api/v1/users/#{user.id}", params: {user: updated_user_params}, headers: { 'Authorization' => header({id: admin.id, account: 'admin'}) }
       end
 
       it 'returns a 200 status' do
@@ -126,7 +201,7 @@ RSpec.describe "Api::V1::Users", type: :request do
     context 'with correct authorization' do
 
       before do
-        delete "/api/v1/users/#{user.id}", headers: { 'Authorization' => header(user_id: user.id) }
+        delete "/api/v1/users/#{user.id}", headers: { 'Authorization' => header({id: admin.id, account: 'admin'}) }
       end
 
       it 'returns a 204 status' do

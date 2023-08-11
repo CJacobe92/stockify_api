@@ -11,10 +11,12 @@ Rails.application.routes.draw do
         post 'password_reset', on: :collection, to: 'auth#password_reset', as: 'password_reset'
         patch 'password_update', on: :collection, to: 'auth#password_update', as: 'password_update', param: :token, constraints: { token: /[^\/]+/ }
 
-        get 'enable_otp/:id', on: :collection, to: 'auth#enable_otp', as: 'enable_otp', param: :id
+        get 'configure_otp/:id', on: :collection, to: 'auth#configure_otp', as: 'configure_otp', param: :id
+        patch 'enable_otp/:id', on: :collection, to: 'auth#enable_otp', as: 'enable_otp', param: :id
         post 'verify_otp/:id', on: :collection, to: 'auth#verify_otp', as: 'verify_otp', param: :id
       end
       resources :users
+      resources :admins
     end
   end
   
