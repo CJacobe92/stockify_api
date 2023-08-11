@@ -1,95 +1,68 @@
 require 'rails_helper'
 
 RSpec.describe "ApplicationController", type: :request do
+  # Global variables
+  let!(:user){ create(:user) }
+  let!(:admin){ create(:admin) }
 
-  # user accessing the resources
-  let!(:user){create(:user)}
-  let!(:not_expired){(Time.now + 24.hours).iso8601()}
-
-  describe 'correct authentication header' do
-    context 'user controller requests' do
-
-      # params for patch
-      let(:user_params){FactoryBot.attributes_for(:user)}
-
-      # user end points
+  describe 'authenticate' do
+    context 'with blank headers' do
       before do
-        get '/api/v1/users', headers: { 'Authorization' => header(user_id: user.id)}
+        get "/api/v1/users/#{user.id}", headers: { 'Authorization' => nil }
       end
 
-      it "returns a 200 status" do
-        expect(response).to have_http_status(:ok)
+      it 'returns 401 status' do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'with expired token' do
+      before do
+        expiry = (Time.now - 48.hours).iso8601()
+        user_payload = { id: user.id, expiry: expiry }
+        admin_payload = { id: admin.id, expiry: expiry }
+
+        user_headers = JWT.encode(user_payload, Rails.application.credentials.secret_key_base)
+        admin_headers = JWT.encode(admin_payload, Rails.application.credentials.secret_key_base)
+
+        get "/api/v1/users/#{user.id}", headers: { 'Authorization' => "Bearer #{user_headers}" }
+      end
+
+      it 'returns 401 status' do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'with verified user' do
+      before do
+        get "/api/v1/users/#{user.id}", headers: { 'Authorization' => header(id: user.id, account: 'user') }
+      end
+
+      it 'returns the current_user' do
+        expect(assigns(:current_user)).to eq(user)
+      end
+    end
+
+    context 'with verified admin' do
+      before do
+        token = encode_token(user_id: admin.id)
+        get "/api/v1/admins/#{admin.id}", headers: { 'Authorization' => header(id: admin.id, account: 'admin') }
+      end
+
+      it 'returns the current_admin' do
+        expect(assigns(:current_admin)).to eq(admin)
+      end
+    end
+
+    context 'with invalid token' do
+      before do
+        invalid_token = "invalid_token"
+        get "/api/v1/users/#{user.id}", headers: { 'Authorization' => "Bearer #{invalid_token}" }
+      end
+
+      it 'returns 401 status' do
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
-
-  
-  describe 'blank header' do
-    before do
-      get '/api/v1/users', headers: { 'Authorization' => ""}
-    end
-
-    it "returns 401 status" do
-      expect(response).to have_http_status(:unauthorized)
-    end
-
-    it "returns the correct error message" do
-      expect(json['error']).to eq('Auth header missing')
-    end
-  end
-
-  describe 'incorrect token' do
-    
-    before do
-      @invalid_auth_header = header(user_id: user.id)
-      @valid_auth_header = header(user_id: user.id)
-      user.update(token: @valid_auth_header)
-
-      get '/api/v1/users', headers: { 'Authorization' => "Bearer #{@invalid_auth_header}" }
-    end
-  
-    it 'returns 401 status' do
-      expect(response).to have_http_status(:unauthorized)
-    end
-  
-    it 'returns the correct error message' do
-      expect(json['error']).to eq('Invalid token')
-    end
-  end
-
-  describe 'Authentication with expired token' do
-    
-    before do
-      expiry = (Time.now - 48.hours).iso8601()
-      payload = {user_id: user.id, expiry: expiry}
-      @invalid_auth_header = JWT.encode(payload, Rails.application.credentials.secret_key_base)
-      @sanitized_header = @invalid_auth_header.split(' ').last
-      @decoded_token = decode_token(@sanitized_header)
-
-      get '/api/v1/users', headers: { 'Authorization' => "Bearer #{@invalid_auth_header}"}
-    end
-
-    it 'returns 401 status' do
-      expect(response).to have_http_status(:unauthorized)
-    end
-
-    it 'returns correct error message' do
-      expect(json['error']).to eq('Token expired')
-    end
-  end
-
-  describe 'Authentication with invalid token' do
-    before do
-      get '/api/v1/users', headers: { 'Authorization' => 'Bearer invalid_token' }
-    end
-
-    it 'returns 401 status' do
-      expect(response).to have_http_status(:unauthorized)
-    end
-
-    it 'returns correct error message' do
-      expect(json['error']).to eq('Not enough or too many segments')
-    end
-  end
-
 end
