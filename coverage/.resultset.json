@@ -266,6 +266,17 @@
           null
         ]
       },
+      "/home/cjacobe/BE_Development/stockify_api/spec/factories/accounts.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          null,
+          null
+        ]
+      },
       "/home/cjacobe/BE_Development/stockify_api/spec/factories/admins.rb": {
         "lines": [
           1,
@@ -283,6 +294,55 @@
           2,
           2,
           2,
+          null,
+          null
+        ]
+      },
+      "/home/cjacobe/BE_Development/stockify_api/spec/factories/portfolios.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          null,
+          null
+        ]
+      },
+      "/home/cjacobe/BE_Development/stockify_api/spec/factories/stock_prices.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          null,
+          null
+        ]
+      },
+      "/home/cjacobe/BE_Development/stockify_api/spec/factories/stocks.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          1,
+          null,
+          null
+        ]
+      },
+      "/home/cjacobe/BE_Development/stockify_api/spec/factories/transactions.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
           null,
           null
         ]
@@ -437,6 +497,36 @@
           null
         ]
       },
+      "/home/cjacobe/BE_Development/stockify_api/spec/models/account_spec.rb": {
+        "lines": [
+          1,
+          null,
+          1,
+          1,
+          2,
+          2,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "/home/cjacobe/BE_Development/stockify_api/app/models/account.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null
+        ]
+      },
+      "/home/cjacobe/BE_Development/stockify_api/app/models/application_record.rb": {
+        "lines": [
+          1,
+          1,
+          null
+        ]
+      },
       "/home/cjacobe/BE_Development/stockify_api/spec/models/admin_spec.rb": {
         "lines": [
           1,
@@ -477,8 +567,69 @@
           null
         ]
       },
-      "/home/cjacobe/BE_Development/stockify_api/app/models/application_record.rb": {
+      "/home/cjacobe/BE_Development/stockify_api/spec/models/portfolio_spec.rb": {
         "lines": [
+          1,
+          null,
+          1,
+          1,
+          null
+        ]
+      },
+      "/home/cjacobe/BE_Development/stockify_api/app/models/portfolio.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null
+        ]
+      },
+      "/home/cjacobe/BE_Development/stockify_api/spec/models/stock_price_spec.rb": {
+        "lines": [
+          1,
+          null,
+          1,
+          1,
+          null
+        ]
+      },
+      "/home/cjacobe/BE_Development/stockify_api/app/models/stock_price.rb": {
+        "lines": [
+          1,
+          1,
+          null
+        ]
+      },
+      "/home/cjacobe/BE_Development/stockify_api/spec/models/stock_spec.rb": {
+        "lines": [
+          1,
+          null,
+          1,
+          1,
+          null
+        ]
+      },
+      "/home/cjacobe/BE_Development/stockify_api/app/models/stock.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          1,
+          null
+        ]
+      },
+      "/home/cjacobe/BE_Development/stockify_api/spec/models/transaction_spec.rb": {
+        "lines": [
+          1,
+          null,
+          1,
+          1,
+          null
+        ]
+      },
+      "/home/cjacobe/BE_Development/stockify_api/app/models/transaction.rb": {
+        "lines": [
+          1,
           1,
           1,
           null
@@ -490,7 +641,8 @@
           null,
           1,
           1,
-          1,
+          2,
+          2,
           null,
           null,
           1,
@@ -537,8 +689,17 @@
           1,
           1,
           1,
+          null,
+          null,
+          null,
           1,
           1,
+          1,
+          1,
+          1,
+          null,
+          1,
+          null,
           null
         ]
       },
@@ -1840,6 +2001,6 @@
         ]
       }
     },
-    "timestamp": 1691790261
+    "timestamp": 1691809664
   }
 }
