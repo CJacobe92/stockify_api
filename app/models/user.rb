@@ -4,7 +4,6 @@ class User < ApplicationRecord
     # associations
     has_secure_password
     has_many :accounts, dependent: :destroy
-    has_many :transactions, dependent: :destroy
 
     # validations
 
@@ -15,5 +14,6 @@ class User < ApplicationRecord
     validates :password_confirmation, presence: true, on: :create
 
     def generate_account_number
+       accounts.build({name: 'starter', balance: 1000})
     end
 end
