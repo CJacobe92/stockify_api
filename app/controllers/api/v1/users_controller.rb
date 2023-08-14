@@ -4,11 +4,12 @@
   class Api::V1::UsersController < ApplicationController
     include TokenHelper
     include HeadersHelper
+    skip_before_action :authenticate, only: [:create]
     before_action :authorized_admin, only: [:index, :destroy]
     before_action :find_user, only: [:show, :update]
     
     def index
-      @users = User.all
+      @users = User.includes(accounts: :portfolios)
       render 'index', status: :ok
     end
 

@@ -15,7 +15,23 @@ Rails.application.routes.draw do
         patch 'enable_otp/:id', on: :collection, to: 'auth#enable_otp', as: 'enable_otp', param: :id
         post 'verify_otp/:id', on: :collection, to: 'auth#verify_otp', as: 'verify_otp', param: :id
       end
-      resources :users
+
+      resources :users do
+        resources :accounts, only: [:update] do
+          resources :transactions
+          resources :portfolios do
+          end
+        end
+      end
+
+      
+
+
+      resources :stocks do
+        resources :stock_prices do
+        end
+      end
+
       resources :admins
     end
   end

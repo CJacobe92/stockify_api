@@ -4,6 +4,7 @@ require './lib/headers_helper'
 class Api::V1::AuthController < ApplicationController
   include TokenHelper
   include HeadersHelper
+  skip_before_action :authenticate, only: [:login, :password_reset, :password_update, :activate]
 
   # creates the token
   def login

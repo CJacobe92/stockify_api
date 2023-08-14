@@ -1,4 +1,6 @@
 class Account < ApplicationRecord
-  has_one :portfolio, dependent: :destroy
+  has_many :portfolios, dependent: :destroy
+  has_many :transactions, dependent: :destroy
   belongs_to :user
+  
 end

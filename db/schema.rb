@@ -38,10 +38,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_12_020753) do
 
   create_table "portfolios", force: :cascade do |t|
     t.integer "shares"
+    t.decimal "purchase_price"
     t.decimal "unrealized_pl"
     t.decimal "equity"
     t.bigint "account_id", null: false
-    t.bigint "stock_id", null: false
+    t.bigint "stock_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_portfolios_on_account_id"
@@ -49,6 +50,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_12_020753) do
   end
 
   create_table "stock_prices", force: :cascade do |t|
+    t.string "name"
+    t.string "symbol"
     t.decimal "amount"
     t.decimal "percent_change"
     t.integer "volume"
@@ -67,15 +70,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_12_020753) do
   end
 
   create_table "transactions", force: :cascade do |t|
-    t.string "type"
+    t.string "transaction_type"
     t.integer "shares"
     t.decimal "amount"
+    t.decimal "balance"
     t.bigint "stock_id", null: false
-    t.bigint "user_id", null: false
+    t.bigint "account_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_transactions_on_account_id"
     t.index ["stock_id"], name: "index_transactions_on_stock_id"
-    t.index ["user_id"], name: "index_transactions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -97,6 +101,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_12_020753) do
   add_foreign_key "portfolios", "accounts"
   add_foreign_key "portfolios", "stocks"
   add_foreign_key "stock_prices", "stocks"
+  add_foreign_key "transactions", "accounts"
   add_foreign_key "transactions", "stocks"
-  add_foreign_key "transactions", "users"
 end
