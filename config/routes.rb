@@ -19,19 +19,14 @@ Rails.application.routes.draw do
       resources :users do
         resources :accounts, only: [:update] do
           resources :transactions
-          resources :portfolios do
-          end
+          resources :portfolios
         end
       end
-
-      
-
 
       resources :stocks do
-        resources :stock_prices do
-        end
+        resources :stock_prices
       end
-
+     
       resources :admins
     end
   end

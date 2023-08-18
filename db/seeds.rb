@@ -37,7 +37,7 @@ data['stock'].each do |stock_data|
   stock_price.update(
     name: stock_data['name'],
     symbol: stock_data['symbol'],
-    amount: stock_data['price']['amount'],
+    price: stock_data['price']['amount'],
     percent_change: stock_data['percent_change'],
     volume: stock_data['volume'],
     currency: stock_data['price']['currency']

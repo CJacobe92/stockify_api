@@ -9,7 +9,7 @@
     before_action :find_user, only: [:show, :update]
     
     def index
-      @users = User.includes(accounts: :portfolios)
+      @users = User.includes(accounts: [:portfolios, :transactions])
       render 'index', status: :ok
     end
 
