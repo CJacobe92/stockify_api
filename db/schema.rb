@@ -16,9 +16,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_12_020753) do
 
   create_table "accounts", force: :cascade do |t|
     t.string "name"
-    t.decimal "value"
     t.decimal "balance"
-    t.decimal "percent_change"
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -44,7 +42,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_12_020753) do
     t.decimal "current_price"
     t.decimal "percent_change"
     t.decimal "average_purchase_price"
-    t.decimal "total_quantity"
+    t.integer "total_quantity"
     t.decimal "total_value"
     t.decimal "total_gl"
     t.bigint "account_id", null: false

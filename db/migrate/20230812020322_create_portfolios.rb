@@ -6,7 +6,7 @@ class CreatePortfolios < ActiveRecord::Migration[7.0]
       t.decimal :current_price
       t.decimal :percent_change
       t.decimal :average_purchase_price
-      t.decimal :total_quantity
+      t.integer :total_quantity
       t.decimal :total_value 
       t.decimal :total_gl
       t.references :account, null: false, foreign_key: true

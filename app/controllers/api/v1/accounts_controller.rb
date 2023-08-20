@@ -23,6 +23,6 @@ class Api::V1::AccountsController < ApplicationController
   end
 
   def update_account
-    @current_account.update(account_params)
+    @current_account.update(balance: @current_account.balance + params[:account][:balance].to_i)
   end
 end

@@ -7,10 +7,5 @@ class StockPrice < ApplicationRecord
   validates :percent_change, presence: true, on: :create
   validates :volume, presence: true,  on: :create
   validates :currency, presence: true, on: :create
-  
-  def update_volume(stock, updated_volume)
-    sp = StockPrice.find(stock.id)
-    sp.update(volume: updated_volume)
-  end
 
 end

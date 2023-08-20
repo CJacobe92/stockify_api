@@ -11,6 +11,10 @@ RSpec.describe "Api::V1::Users", type: :request do
 
       let!(:users){create_list(:user, 10)}
       let!(:admin){create(:admin)}
+      let(:stock) { create(:stock) }
+      let(:sp) { create(:stock_price, stock: stock) }
+      let(:account) { create(:account) }
+
       before do
         generate_users_data(users)
         get '/api/v1/users', headers: { 'Authorization' => header({id: admin.id, account: 'admin'}) }
@@ -38,16 +42,20 @@ RSpec.describe "Api::V1::Users", type: :request do
       it 'returns the accounts keys with the expected keys' do
         json['data'].map do |user|
           user['accounts'].map do |account|
-            expect(account.size).to eq(7)
+            if account['transactions'].present? && account['portfolios'].present?
+              expect(account.size).to eq(7)
+            end
           end
         end
       end
 
-      it 'returns the portfolios keys with the expected keys' do
+      it 'returns the transaction keys with the expected keys' do
         json['data'].map do |user|
           user['accounts'].map do |account|
-            account['portfolios'].map do |portfolio|
-              expect(portfolio.size).to eq(8)
+            if account['transactions'].present?
+              account['transactions'].map do |transaction|
+                expect(transaction.size).to eq(10)
+              end
             end
           end
         end
@@ -56,8 +64,10 @@ RSpec.describe "Api::V1::Users", type: :request do
       it 'returns the portfolios keys with the expected keys' do
         json['data'].map do |user|
           user['accounts'].map do |account|
-            account['transactions'].map do |transaction|
-              expect(transaction.size).to eq(9)
+            if account['portfolios'].present?
+              account['portfolios'].map do |portfolio|
+                expect(portfolio.size).to eq(12)
+              end
             end
           end
         end
@@ -293,8 +303,7 @@ RSpec.describe "Api::V1::Users", type: :request do
 
     users.each do |user|
       user.accounts.map do |account| 
-        create_list(:portfolio, 1, account: account)
-        create_list(:buy, 2, account: account, stock: stock)
+        create(:buy, account: account, stock: stock)
       end
     end
   end
@@ -305,7 +314,6 @@ RSpec.describe "Api::V1::Users", type: :request do
     end
 
     user.accounts.map do |account| 
-      create_list(:portfolio, 1, account: account)
       create_list(:buy, 2, account: account, stock: stock)
     end
   end

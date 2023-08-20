@@ -1,92 +1,47 @@
 require 'rails_helper'
 
 RSpec.describe Transaction, type: :model do
- 
-  describe 'create_or_update_user_account_portfolio' do
 
-    context 'first buy transaction' do
+  let(:stock) { create(:stock) }
+  let(:sp) { create(:stock_price, stock: stock) }
+  let(:user) { create(:user) }
+  let(:account) { create(:account, user: user) }
 
-      let!(:stock){ create(:stock) } 
-      let!(:sp){ create(:stock_price, stock: stock)}
-    
-      let!(:user){ create(:user) }
-      let!(:account){ create(:account, user: user) } 
-      let!(:transaction){ create(:buy, account: account, stock_id: sp.stock_id) }
-      let!(:portfolio){account.portfolios.find_by(stock_id: stock.id)}
-      let!(:unrealized_pl){ sp&.amount * transaction.shares}
+  context 'buy transaction' do
 
-      before do
-        portfolio.reload
-        account.reload
-      end
+    it 'raises error when balance is insufficient' do
+      
+      account.update(balance: 0)
 
-      it 'creates a new portfolio when none exists' do
-        expect(portfolio).not_to be_nil
-      end
-
-      it 'update new portfolio with correct shares values' do
-        expect(portfolio.shares.to_s).to eq("500")
-      end
-
-      it 'updates new portfolio with correct purchase_price' do
-        expect(portfolio.purchase_price.to_s).to eq("0.455")
-      end
-
-      it 'updates new portfolio with correct unrealized_pl' do
-        expect(portfolio.unrealized_pl.to_s).to eq("227.5")
-      end
-
-      it 'updates new portfolio with correct equity' do
-        expect(portfolio.equity.to_s).to eq("1227.5")
-      end
-
-      it 'update the account_balance' do
-        expect(account.balance.to_s).to eq("772.5")
-      end
+      expect {
+        create(:buy, account: account, stock_id: sp.stock_id)
+      }.to raise_error(StandardError, 'Insufficient balance')
     end
 
-    context 'on_going buy transactions' do
+    it 'creates a new portfolio when none exists' do
+      expect { create(:buy, account: account, stock_id: sp.stock_id) }.to change { Portfolio.count }.by(1)
+    end
 
-      # initiate the portfolio
-      let!(:stock){ create(:stock) } 
-      let!(:sp){ create(:stock_price, stock: stock)}
-    
-      let!(:user){ create(:user) }
-      let!(:account){ create(:account, user: user) } 
-      let!(:transaction){ create(:buy, account: account, stock_id: sp.stock_id) }
-      let!(:next_transaction){ create(:buy, account: account, stock_id: sp.stock_id) }
-      let!(:portfolio){account.portfolios.find_by(stock_id: stock.id)}
-      let!(:unrealized_pl){ sp&.amount * transaction.shares}
+    it 'updates the portfolio correctly' do
+      transaction = create(:buy, account: account, stock_id: sp.stock_id)
+      portfolio = account.portfolios.find_by(stock: stock)
 
-      # 
-
-      it 'checks if an existing portfolio exists' do
-        existing_portfolio = account.portfolios.find_by(stock_id: stock.id)
-        expect(existing_portfolio).not_to be_nil
-      end
-
-      it 'update the existing portfolio with correct shares values' do
-
-        expect(portfolio.shares).to eq(1000)
-      end
-
-      it 'updates new portfolio with correct purchase_price' do
-        expect(portfolio.purchase_price).to eq(0.455)
-      end
-
-      it 'updates new portfolio with correct unrealized_pl' do
-        expect(portfolio.unrealized_pl).to eq()
-      end
-
-      # it 'updates new portfolio with correct equity' do
-      #   account = attributes_for(:account)
-      #   equity = account[:balance].to_f + unrealized_pl
-      #   expect(portfolio.equity).to eq(equity)
-      # end
-
+      expect(portfolio.total_quantity).to eq(500)
+      expect(portfolio.total_value).to eq(transaction.total_cash_value)
     end
   end
 
+  context 'sell transaction' do
+    it 'updates the portfolio correctly' do
+      create(:buy, account: account, stock_id: sp.stock_id)
+      expect { create(:sell, account: account, stock_id: sp.stock_id) }.to change { Portfolio.count }.by(0)
+
+      portfolio = account.portfolios.find_by(stock: stock)
+
+      expect(portfolio.total_quantity).to eq(0)
+    end
+  end
+ 
   describe 'associations' do
     it { is_expected.to belong_to(:account) }
     it { is_expected.to belong_to(:stock) }
@@ -94,8 +49,6 @@ RSpec.describe Transaction, type: :model do
 
   describe 'validations' do
     it { is_expected.to validate_presence_of(:transaction_type) }
-    it { is_expected.to validate_presence_of(:shares) }
+    it { is_expected.to validate_presence_of(:quantity) }
   end
-
-
 end

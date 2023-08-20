@@ -10,7 +10,7 @@ class Portfolio < ApplicationRecord
     portfolio = account.portfolios.create(
         symbol: sp&.symbol,
         description: sp&.name,
-        current_price: sp&.price,
+        current_price: 0,
         average_purchase_price: 0,
         total_quantity: 0,
         total_value: 0,
@@ -22,16 +22,18 @@ class Portfolio < ApplicationRecord
     end
   end
 
-  def self.update_porfolio_for_buy(stock, account, quantity, total_cash_value)
-    
-    existing_portfolio = self.find_by(stock: stock)
+  def self.update_portfolio_for_buy(stock, account, quantity, total_cash_value)
+
     sp = stock.stock_prices.find_by(stock: stock)
+    current_price = sp&.price
 
-
+    existing_portfolio = self.find_by(stock: stock)
+    
     total_quantity = existing_portfolio.total_quantity + quantity
     total_value =  existing_portfolio.total_value + total_cash_value
 
     existing_portfolio.update(
+      current_price: current_price,
       total_quantity: total_quantity,
       total_value: total_value
     )
@@ -40,6 +42,9 @@ class Portfolio < ApplicationRecord
   end
     
   def self.update_portfolio_for_sell(stock, account, quantity, total_cash_value)
+
+    sp = stock.stock_prices.find_by(stock: stock)
+    current_price = sp&.price
 
     existing_portfolio = self.find_by(stock: stock)
 
@@ -51,6 +56,7 @@ class Portfolio < ApplicationRecord
       total_value =  existing_portfolio.total_value - total_cash_value
 
       existing_portfolio.update(
+        current_price: current_price,
         total_quantity: total_quantity,
         total_value: total_value
       )
@@ -63,6 +69,7 @@ class Portfolio < ApplicationRecord
   private
 
   def self.recalculate_global_values(existing_portfolio)
+
   
       # Calculate total_gl and percent_change
       average_purchase_price = calculate_avg_purchase_price(existing_portfolio.total_value, existing_portfolio.total_quantity)
@@ -94,7 +101,7 @@ class Portfolio < ApplicationRecord
   end
 
   def self.calculate_total_gl(current_price, average_purchase_price, total_quantity)
-    if total_quantity !=0
+    if average_purchase_price !=0 && total_quantity !=0
       total_gl = (current_price - average_purchase_price) * total_quantity
     else
       total_gl = 0

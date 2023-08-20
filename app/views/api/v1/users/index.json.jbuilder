@@ -24,7 +24,7 @@ json.data do
                 :percent_change, 
                 :total_quantity,
                 :average_purchase_price, 
-                :total_value 
+                :total_value,
                 :total_gl, 
                 :stock_id, 
                 :created_at, 

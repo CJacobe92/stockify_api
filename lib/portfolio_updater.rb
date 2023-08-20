@@ -32,11 +32,11 @@ module PortfolioUpdater
   end
 
   def calculate_total_gl(current_price, average_purchase_price, total_quantity)
-    if total_quantity !=0
+    if average_purchase_price !=0
       total_gl = (current_price - average_purchase_price) * total_quantity
     else
       total_gl = 0
     end
   end
-  
+
 end

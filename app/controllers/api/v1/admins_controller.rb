@@ -4,6 +4,8 @@ require './lib/headers_helper'
 class Api::V1::AdminsController < ApplicationController
   include TokenHelper
   include HeadersHelper
+  
+  before_action :authenticate
 
   def index
     @admins = Admin.all
@@ -11,16 +13,19 @@ class Api::V1::AdminsController < ApplicationController
   end
 
   def create
-    @admin = Admin.create(admin_params)
-
-    if @admin.save
-      token = encode_token(id: @admin.id)
-      response_headers(@admin, token)
-      render 'create', status: :created
-    else 
-      render 'create', status: :unprocessable_entity
+    if @current_admin
+      @admin = Admin.new(admin_params)
+      
+      if @admin.save  
+        render 'create', status: :created
+      else
+        render json: { error: 'Failed to create admin', errors: @admin.errors.full_messages }, status: :unprocessable_entity
+      end
+    else
+      render json: { error: 'Unauthorized' }, status: :unauthorized
     end
   end
+  
 
   def show
     @current_admin

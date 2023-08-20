@@ -1,13 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe "Api::V1::Admins", type: :request do
+  let!(:global_admin){create(:global_admin)}
   let!(:admin){create(:admin)}
+  
 
   describe 'GET /index' do
     context 'with correct authorization' do
 
       before do
-        create_list(:admin, 9)
+        create_list(:admin, 8)
         get '/api/v1/admins', headers: { 'Authorization' => header(id: admin.id, account: 'admin') }
 
       end
@@ -35,7 +37,7 @@ RSpec.describe "Api::V1::Admins", type: :request do
       let(:admin_attributes) { attributes_for(:admin) }
 
       before do
-        post '/api/v1/admins', params: { admin: admin_attributes }
+        post '/api/v1/admins', params: { admin: admin_attributes }, headers: { 'Authorization' => header(id: global_admin.id, account: 'admin') }
       end
 
       it 'returns a 201 status' do
@@ -49,24 +51,12 @@ RSpec.describe "Api::V1::Admins", type: :request do
       it 'returns the create json with the expected keys' do 
         assert_admin_keys(json['data'])
       end
-
-      it 'returns authorization header' do
-        expect(response.headers['Authorization']).to match(/^Bearer .+/)
-      end
-
-      it 'returns X-REQUEST-ID header' do
-        expect(response.headers).to include('X-REQUEST-ID')
-      end
-
-      it 'returns a stockify client header' do
-        expect(response.headers['client']).to include('stockify')
-      end
     end
 
     context 'with invalid administrator params' do
 
       before do
-        post '/api/v1/admins', params: {admin: attributes_for(:incorrect_admin)}
+        post '/api/v1/admins', params: {admin: attributes_for(:incorrect_admin)}, headers: { 'Authorization' => header(id: admin.id, account: 'admin') }
       end
 
       it 'returns a 422 status' do
@@ -131,7 +121,7 @@ RSpec.describe "Api::V1::Admins", type: :request do
     end
   end
 
-  # Helper methods
+  # # Helper methods
 
   def assert_admins_keys(data)
     expect(data.size).to eq(10)

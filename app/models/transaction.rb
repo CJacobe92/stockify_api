@@ -4,10 +4,8 @@ class Transaction < ApplicationRecord
 
   before_create :create_or_update_user_account_portfolio
 
-  # validates :transaction_type, presence: true, on: :create
-  # validates :quantity, presence: true, on: :create
-  # validates :stock, presence: true, on: :create
-  # validates :account, presence: true, on: :create
+  validates :transaction_type, presence: true, on: :create
+  validates :quantity, presence: true, on: :create
 
   def create_or_update_user_account_portfolio
 
@@ -15,7 +13,9 @@ class Transaction < ApplicationRecord
 
     if transaction_type == 'buy'
       transaction_for_buy(stock, account, quantity)
-    elsif transaction_type == 'sell'
+    end
+    
+    if transaction_type == 'sell'
       transaction_for_sell(stock, account, quantity)
     end
     
@@ -36,7 +36,7 @@ class Transaction < ApplicationRecord
       raise StandardError, 'Insufficient balance'
       return
     else
-      Portfolio.update_porfolio_for_buy(stock, account, quantity, total_cash_value)
+      Portfolio.update_portfolio_for_buy(stock, account, quantity, total_cash_value)
       # update the transaction records
       self.price = purchase_price
       self.symbol = sp&.symbol
@@ -46,7 +46,7 @@ class Transaction < ApplicationRecord
       ending_balance = starting_balance - total_cash_value
       account.update_account_balance(account, ending_balance.round(2))
   
-      # update the stock_prices volumen
+      # update the stock_prices volume
       volume = sp.volume - quantity
       sp.update(volume: volume)
     end
@@ -70,7 +70,7 @@ class Transaction < ApplicationRecord
     account.update_account_balance(account, ending_balance.round(2))
 
     # update the stock_prices volumen
-    volume = sp.volume - quantity
+    volume = sp.volume + quantity
     sp.update(volume: volume)
   end
 

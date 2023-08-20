@@ -1,15 +1,8 @@
 require './lib/portfolio_updater'
 
 class Api::V1::TransactionsController < ApplicationController
-  # include PortfolioUpdater
+  before_action :authenticate
   before_action :find_account, only: [:create]
-  # before_action :update_portfolio_global_values, only: [:index, :show, :update]
-  # after_action :update_portfolio_global_values, only: [:index, :show, :update]
-
-  def index
-    @transactions = Transaction.all
-    render json: @transactions
-  end
 
   def create
 
@@ -31,6 +24,6 @@ class Api::V1::TransactionsController < ApplicationController
   def find_account
     @current_account = @current_user.accounts.find(params[:account_id])
   rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Category not found' }, status: :not_found
+    render json: { error: 'Account not found' }, status: :not_found
   end
 end

@@ -10,7 +10,6 @@
     skip_before_action :authenticate, only: [:create]
     before_action :authorized_admin, only: [:index, :destroy]
     before_action :find_user, only: [:show, :update]
-    # before_action :recalculate_global_values, only: [:index, :show, :update]
     
     def index
       @users = User.includes(accounts: [:portfolios, :transactions])
@@ -18,7 +17,7 @@
     end
 
     def create
-      @user = User.create(user_params)
+      @user = User.new(user_params)
 
       if @user.save
         UserMailer.welcome_email(@user).deliver_later
