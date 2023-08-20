@@ -1,72 +1,105 @@
-require 'pry'
-
 class Portfolio < ApplicationRecord
   belongs_to :account
   belongs_to :stock
 
-  def self.create_portfolio(account, stock, quantity, purchase_price)
-
-    # variables
+  def self.create_portfolio(stock, account)
+    existing_portfolio = self.find_by(stock: stock)
     sp = stock.stock_prices.find_by(stock: stock)
 
-    sp = stock.stock_prices.find_by(stock: stock)
-    transactions = Transaction.find_by(stock: stock)
-
-    symbol = sp&.symbol
-    description = sp&.name
-    current_price = sp&.price
-    average_purchase_price = purchase_price
-    total_quantity = quantity
-    total_value = (purchase_price * total_quantity)
-    total_gl = (current_price - purchase_price) * quantity
-    percent_change = (total_gl / total_value) * 100
-  
-    # initialize portfolio
-    account.portfolios.create(
-      symbol: symbol,
-      description: description,
-      current_price: current_price,
-      average_purchase_price: average_purchase_price,
-      total_quantity: total_quantity,
-      total_value: total_value,
-      percent_change: percent_change,
-      total_gl: total_gl ,
-      stock: stock,
-      account: account,
-    )
+    if existing_portfolio.nil?
+    portfolio = account.portfolios.create(
+        symbol: sp&.symbol,
+        description: sp&.name,
+        current_price: sp&.price,
+        average_purchase_price: 0,
+        total_quantity: 0,
+        total_value: 0,
+        percent_change: 0,
+        total_gl: 0,
+        stock: stock,
+        account: account
+      )
+    end
   end
 
-  def update_portfolio(account, stock, quantity, existing_portfolio)
-
+  def self.update_porfolio_for_buy(stock, account, quantity, total_cash_value)
+    
+    existing_portfolio = self.find_by(stock: stock)
     sp = stock.stock_prices.find_by(stock: stock)
 
-    transactions = account.transactions.where(stock_id: stock.id)
-    current_price = sp&.price
-    current_purchase = current_price * quantity
 
-    total_purchase = existing_portfolio.total_value + current_purchase
     total_quantity = existing_portfolio.total_quantity + quantity
-
-    average_purchase_price = total_purchase / total_quantity
-    total_value = total_purchase
-   
-    total_gl = (current_price - average_purchase_price) * total_quantity
-    percent_change = (total_gl / total_purchase) * 100
+    total_value =  existing_portfolio.total_value + total_cash_value
 
     existing_portfolio.update(
-      current_price: current_price,
-      average_purchase_price: average_purchase_price,
       total_quantity: total_quantity,
-      total_value: total_value.round(2),
-      percent_change: percent_change,
-      total_gl: total_gl.round(2)   
+      total_value: total_value
     )
-    puts "total_purchase #{total_purchase}"
-    puts "current_p #{current_price}"
-    puts "quantity: #{total_quantity}"
-    puts "value: #{total_value.round(2)}"
-    puts "avg_price #{average_purchase_price.rounded(2)}"
-    puts "percent_change #{percent_change}"
-    puts "total_gl #{total_gl.round(2)}"
+    
+    recalculate_global_values(existing_portfolio) if existing_portfolio.present?
   end
+    
+  def self.update_portfolio_for_sell(stock, account, quantity, total_cash_value)
+
+    existing_portfolio = self.find_by(stock: stock)
+
+    if quantity > existing_portfolio.total_quantity
+      raise StandardError, 'Quantity being sold is greater than owned assets.'
+      return
+    else 
+      total_quantity = existing_portfolio.total_quantity - quantity
+      total_value =  existing_portfolio.total_value - total_cash_value
+
+      existing_portfolio.update(
+        total_quantity: total_quantity,
+        total_value: total_value
+      )
+      account.update_account_balance_for_total_gl(account, existing_portfolio.total_gl)
+      recalculate_global_values(existing_portfolio) if existing_portfolio.present?
+    end
+
+  end
+
+  private
+
+  def self.recalculate_global_values(existing_portfolio)
+  
+      # Calculate total_gl and percent_change
+      average_purchase_price = calculate_avg_purchase_price(existing_portfolio.total_value, existing_portfolio.total_quantity)
+      total_gl = calculate_total_gl(existing_portfolio.current_price, existing_portfolio.average_purchase_price, existing_portfolio.total_quantity)
+      percent_change = calculate_percent_change(total_gl, existing_portfolio.total_value)
+
+      # Update the calculated fields
+      existing_portfolio.update(
+        total_gl: total_gl.round(2), 
+        percent_change: percent_change.round(2),
+        average_purchase_price: average_purchase_price
+      ) if existing_portfolio.present?
+  end
+
+  def self.calculate_avg_purchase_price(total_value, total_quantity)
+    if total_quantity != 0
+      average_purchase_price = total_value / total_quantity
+    else
+      average_purchase_price = 0
+    end
+  end
+
+  def self.calculate_percent_change(total_gl, total_value)
+    if total_gl !=0
+      percent_change = ( total_gl / total_value) * 100
+    else
+      percent_change = 0
+    end
+  end
+
+  def self.calculate_total_gl(current_price, average_purchase_price, total_quantity)
+    if total_quantity !=0
+      total_gl = (current_price - average_purchase_price) * total_quantity
+    else
+      total_gl = 0
+    end
+  end
+
 end
+

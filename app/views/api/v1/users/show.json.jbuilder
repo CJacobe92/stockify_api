@@ -38,7 +38,7 @@ json.data do
               :quantity, 
               :price, 
               :symbol,
-              :total_purchase,
+              :total_cash_value,
               :stock_id, 
               :account_id, 
               :created_at, 

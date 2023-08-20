@@ -80,7 +80,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_12_020753) do
     t.integer "quantity"
     t.decimal "price"
     t.string "symbol"
-    t.decimal "total_purchase"
+    t.decimal "total_cash_value"
     t.bigint "account_id", null: false
     t.bigint "stock_id"
     t.datetime "created_at", null: false

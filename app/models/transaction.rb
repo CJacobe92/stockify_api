@@ -11,79 +11,67 @@ class Transaction < ApplicationRecord
 
   def create_or_update_user_account_portfolio
 
-    existing_portfolio = account.portfolios.find_by(stock: stock)
+    Portfolio.create_portfolio(stock, account)
 
     if transaction_type == 'buy'
-      if existing_portfolio.nil?
-        create_transaction_account_portfolio(account, stock, quantity)
-      else
-        update_transaction_account_portfolio(account, stock, quantity, existing_portfolio)
-      end
+      transaction_for_buy(stock, account, quantity)
+    elsif transaction_type == 'sell'
+      transaction_for_sell(stock, account, quantity)
     end
-
-    if transaction_type == 'sell'
-      update_transaction_account_portfolio_for_sell(account, stock, shares, existing_portfolio) unless existing_portfolio.nil?
-    end
-
+    
   end
 
   private
 
-  def create_transaction_account_portfolio(account, stock, quantity)
+
+  def transaction_for_buy(stock, account, quantity)
+
     sp = stock.stock_prices.find_by(stock: stock)
 
     purchase_price = sp&.price
-    total_purchase = quantity * purchase_price
+    total_cash_value = quantity * purchase_price
     starting_balance =  account.balance
-
-    if total_purchase > starting_balance
+    
+    if total_cash_value > starting_balance
       raise StandardError, 'Insufficient balance'
       return
     else
-      Portfolio.create_portfolio(account, stock, quantity, purchase_price)
-
+      Portfolio.update_porfolio_for_buy(stock, account, quantity, total_cash_value)
       # update the transaction records
       self.price = purchase_price
       self.symbol = sp&.symbol
-      self.total_purchase = total_purchase
-
+      self.total_cash_value = total_cash_value
+  
       # update the account balance
-      ending_balance = starting_balance - total_purchase
-      account.update_account_balance(account, ending_balance)
-
+      ending_balance = starting_balance - total_cash_value
+      account.update_account_balance(account, ending_balance.round(2))
+  
       # update the stock_prices volumen
       volume = sp.volume - quantity
       sp.update(volume: volume)
     end
   end
 
-  def update_transaction_account_portfolio(account, stock, quantity, existing_portfolio)
-
+  def transaction_for_sell(stock, account, quantity)
     sp = stock.stock_prices.find_by(stock: stock)
 
-    purchase_price = sp&.price
-    total_purchase = quantity * purchase_price
+    sell_price = sp&.price
+    total_cash_value = quantity * sell_price
     starting_balance =  account.balance
 
-    if total_purchase > starting_balance
-      raise StandardError, 'Insufficient balance'
-      return
-    else
-      account.portfolios.find(existing_portfolio.id).update_portfolio(account, stock, quantity, existing_portfolio)
+    Portfolio.update_portfolio_for_sell(stock, account, quantity, total_cash_value)
+    # #update the transaction records
+    self.price = sell_price
+    self.symbol = sp&.symbol
+    self.total_cash_value = total_cash_value
 
-      # #update the transaction records
-      self.price = purchase_price
-      self.symbol = sp&.symbol
-      self.total_purchase = total_purchase
+    # update the account balance
+    ending_balance = starting_balance + total_cash_value
+    account.update_account_balance(account, ending_balance.round(2))
 
-      # update the account balance
-      ending_balance = starting_balance - total_purchase
-      account.update_account_balance(account, ending_balance)
-
-      # update the stock_prices volumen
-      volume = sp.volume - quantity
-      sp.update(volume: volume)
-    end
+    # update the stock_prices volumen
+    volume = sp.volume - quantity
+    sp.update(volume: volume)
   end
 
 end

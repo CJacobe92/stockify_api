@@ -1,5 +1,10 @@
+require './lib/portfolio_updater'
+
 class Api::V1::TransactionsController < ApplicationController
+  # include PortfolioUpdater
   before_action :find_account, only: [:create]
+  # before_action :update_portfolio_global_values, only: [:index, :show, :update]
+  # after_action :update_portfolio_global_values, only: [:index, :show, :update]
 
   def index
     @transactions = Transaction.all
