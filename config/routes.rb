@@ -17,21 +17,16 @@ Rails.application.routes.draw do
       end
 
       resources :users do
-        resources :accounts, only: [:update] do
+        resources :accounts do
           resources :transactions
-          resources :portfolios do
-          end
+          resources :portfolios
         end
       end
-
-      
-
 
       resources :stocks do
-        resources :stock_prices do
-        end
+        patch 'update_current_prices', on: :collection, to: 'stocks#update_current_prices', as: 'update_current_prices'
       end
-
+     
       resources :admins
     end
   end

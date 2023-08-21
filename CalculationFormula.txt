@@ -1,0 +1,51 @@
+Calculation for first unrealized_pl, equity and ending_balance for buy
+
+Values:
+
+stock price per share: 0.455
+stocks to purchase: 500
+starting balance: 1000
+
+Unrealized pl calc: stocks to purchase * stock price per share
+unrealized_pl: 500 * 0.455 = 227.5
+
+
+Equity calc: starting balance + unrealized_pl
+Equity: 1000 + 227.5 = 1227.5
+
+Ending balance calc:  starting_balance - unrealized_pl
+ending_balance: 1000 - 227.5 = 772.5
+
+Calculation for succeding unrealized_pl, equity and ending balance for buy
+
+starting balance: 772.5
+stocks to purchase: 500
+
+transaction: 
+
+existing_equity: 1227.5
+existing_unrealized_pl: 227.5
+
+unrealized_pl: 500 * 0.455 = 227.5
+
+portfolio_updated_unrealized_pl: existing_unrealized_pl + unrealized_pl = 455
+portfolio_updated_equity: existing_unrealized_pl - portfolio_updated_unrealized_pl = 772.5
+
+ending_balance: starting_balance - unrealized_pl = 545
+
+Calculation for unrealized_pl, realized_pl, equity and ending balance for sell based on the previous succeeding buy
+
+starting_balance: 545
+stocks_to_sell: 500
+
+transaction:
+
+existing_equity: 772.5
+existing_unrealized_pl: 455
+
+realized_pl: 500 * 0.455 = 227.5
+
+portfolio_updated_unrealized_pl:  existing_unrealized_pl - realized_pl - 227.5
+portfolio_updated_equity: existing_unrealized_pl + portfolio_updated_unrealized_pl = 1227.5
+
+ending_balance: starting_balance + realized_pl = 772.5

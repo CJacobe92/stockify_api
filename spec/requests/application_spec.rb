@@ -54,6 +54,8 @@ RSpec.describe "ApplicationController", type: :request do
       end
     end
 
+    
+
     context 'with invalid token' do
       before do
         invalid_token = "invalid_token"

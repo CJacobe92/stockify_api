@@ -1,10 +1,11 @@
 class StockPrice < ApplicationRecord
   belongs_to :stock
 
-  attr_accessor :update_stock_volume
+  validates :name, presence: true, on: :create
+  validates :symbol, presence: true, on: :create
+  validates :price, presence: true, on: :create
+  validates :percent_change, presence: true, on: :create
+  validates :volume, presence: true,  on: :create
+  validates :currency, presence: true, on: :create
 
-  def update_stock_volume(id, volume)
-    stock = Stock.find(id)
-    stock.update(volume: volume)
-  end
 end

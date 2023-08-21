@@ -14,4 +14,12 @@ FactoryBot.define do
     password {'not_a_valid_password'}
     password_confirmation {'not_a_valid_password_confirmation'}
   end
+
+  factory :global_admin, class: 'Admin' do
+    firstname { "global"}
+    lastname { "admin"}
+    email { "global.admin@email.com"}
+    password {'admin'}
+    password_confirmation {'admin'}
+  end
 end

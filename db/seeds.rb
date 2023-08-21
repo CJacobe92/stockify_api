@@ -7,9 +7,9 @@
 #   Character.create(name: "Luke", movie: movies.first)
 
 Admin.create({
-  firstname:'admin',
-  lastname: 'user',
-  email: 'admin@email.com',
+  firstname:'global',
+  lastname: 'admin',
+  email: 'global.admin@email.com',
   password: 'admin',
   password_confirmation: 'admin'
 })
@@ -37,7 +37,7 @@ data['stock'].each do |stock_data|
   stock_price.update(
     name: stock_data['name'],
     symbol: stock_data['symbol'],
-    amount: stock_data['price']['amount'],
+    price: stock_data['price']['amount'],
     percent_change: stock_data['percent_change'],
     volume: stock_data['volume'],
     currency: stock_data['price']['currency']

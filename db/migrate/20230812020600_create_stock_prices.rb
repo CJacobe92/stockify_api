@@ -3,7 +3,7 @@ class CreateStockPrices < ActiveRecord::Migration[7.0]
     create_table :stock_prices do |t|
       t.string :name
       t.string :symbol
-      t.decimal :amount
+      t.decimal :price
       t.decimal :percent_change
       t.integer :volume
       t.string :currency

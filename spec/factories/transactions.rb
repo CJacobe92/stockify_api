@@ -1,9 +1,15 @@
 FactoryBot.define do
-  factory :transaction do
-    type { "" }
-    shares { 1 }
-    amount { "9.99" }
+  factory :sell, class: 'Transaction' do
+    transaction_type { "sell" }
+    quantity { "500" }
     association :stock
-    association :user
+    association :account
+  end
+
+  factory :buy, class: 'Transaction' do
+    transaction_type { "buy" }
+    quantity { "500"}
+    association :stock
+    association :account
   end
 end

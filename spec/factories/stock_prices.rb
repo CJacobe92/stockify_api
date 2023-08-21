@@ -1,9 +1,11 @@
 FactoryBot.define do
   factory :stock_price do
-    amount { "9.99" }
-    percent_change { "9.99" }
-    volume { 1 }
-    currency { "MyString" }
+    name {"My Corporation"}
+    symbol {"MC"}
+    price { "0.45" }
+    percent_change { "-0.025" }
+    volume { "1500" }
+    currency { "PHP" }
     association :stock
   end
 end

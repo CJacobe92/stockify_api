@@ -45,6 +45,9 @@ group :development, :test do
   gem "shoulda-matchers", "~> 5.3"
   gem "rails-controller-testing"
   gem "sidekiq"
+  gem "database_cleaner"
+  # gem "spring"
+  # gem 'database_cleaner-active_record'  
 end
 
 group :development do
@@ -54,7 +57,7 @@ end
 
 
 
-
+gem "pry"
 gem "jwt", "~> 2.7"
 
 gem "rotp", "~> 6.2"
