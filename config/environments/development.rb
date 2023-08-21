@@ -74,12 +74,29 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
   address: "smtp.gmail.com",
   port: 587,
-  user_name: Rails.application.credentials.smtp[:SMTP_USERNAME],
-  password: Rails.application.credentials.smtp[:SMTP_PASSWORD],
+  user_name: ENV['GMAIL_USERNAME'],
+  password:  ENV['GMAIL_PASSWORD'],
   authentication: :plain,
   enable_starttls_auto: true
   }
 
+  # config.action_mailer.raise_delivery_errors = true
+  # config.action_mailer.default_url_options = { host: "localhost:3000", protocol: "http" }
+  # config.action_mailer.perform_deliveries = true
+  # config.action_mailer.default :charset => "utf-8"
+  # config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.smtp_settings = {
+  # address: "smtp-mail.outlook.com",
+  # port: 587,
+  # user_name: ENV['OUTLOOK_USERNAME'],
+  # password:  ENV['OUTLOOK_PASSWORD'],
+  # authentication: :plain,
+  # enable_starttls_auto: true
+  # }
+
+
+  
+  # for testing connection
   # config.action_mailer.delivery_method = :smtp
   # config.action_mailer.smtp_settings = {
   #   :user_name => '9b1d4862639738',
