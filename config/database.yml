@@ -84,5 +84,5 @@ test:
 production:
   <<: *default
   database: stockify_production
-  username: stockify
-  password: <%= ENV["STOCKIFY_DATABASE_PASSWORD"] %>
+  username: cjacobe
+  url: <%= ENV['DATABASE_URL'] %>
