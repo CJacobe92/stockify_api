@@ -81,6 +81,7 @@ Rails.application.configure do
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end
 
+ 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
@@ -95,5 +96,10 @@ Rails.application.configure do
     open_timeout: 5,
     read_timeout: 5
   }
+
+   # RENDER
+
+   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present? || ENV['RENDER'].present?
+  
 
 end
