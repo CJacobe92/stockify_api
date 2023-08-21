@@ -87,6 +87,9 @@ Rails.application.configure do
 
   # config/environments/production.rb
 
+  GMAIL_USERNAME = Rails.application.credentials.smtp[:gmail_username]
+  GMAIL_PASSWORD = Rails.application.credentials.smtp[:gmail_password]
+
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.default_url_options = { host: "https://cjacobestockify.vercel.app/", protocol: "https" }
   config.action_mailer.perform_deliveries = true
@@ -95,8 +98,8 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
   address: "smtp.gmail.com",
   port: 587,
-  user_name: ENV['GMAIL_USERNAME'],
-  password:  ENV['GMAIL_PASSWORD'],
+  user_name: GMAIL_USERNAME,
+  password:  GMAIL_PASSWORD,
   authentication: :plain,
   enable_starttls_auto: true
   }

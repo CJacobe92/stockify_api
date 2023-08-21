@@ -8,13 +8,13 @@ class UserMailer < ApplicationMailer
 
   def password_reset_email(user, token)
     @user = user
-    @password_update_url = "#{Rails.application.credentials.password_update[:URL]}/api/v1/auth/password_update?token=#{token}"
+    @password_update_url = "#{Rails.application.credentials.mailer_url[:password_update]}/api/v1/auth/password_update?token=#{token}"
     mail(to: @user.email, subject: 'Reset your Stockify Password')
   end
 
   def activation_email(user, token)
     @user = user
-    @activation_url= "#{Rails.application.credentials.activation[:URL]}/api/v1/auth/activate?token=#{token}"
+    @activation_url= "#{Rails.application.credentials.mailer_url[:activation]}/api/v1/auth/activate?token=#{token}"
     mail(to: @user.email, subject: 'Stockify account activation')
   end
 end
