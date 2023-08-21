@@ -85,6 +85,9 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
+  # config/environments/production.rb
+  Rails.application.routes.default_url_options[:host] = 'https://cjacobestockify.vercel.app/'
+
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address: 'smtp.gmail.com',
@@ -101,5 +104,5 @@ Rails.application.configure do
 
    config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present? || ENV['RENDER'].present?
   
-
+  
 end
