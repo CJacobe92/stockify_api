@@ -5,6 +5,7 @@ class CreateAdmins < ActiveRecord::Migration[7.0]
       t.string :lastname
       t.string :email
       t.string :password_digest
+      t.boolean :activated
       t.string :token
       t.string :reset_token
       t.string :otp_secret_key

@@ -16,7 +16,8 @@ class Api::V1::AdminsController < ApplicationController
     if @current_admin
       @admin = Admin.new(admin_params)
       
-      if @admin.save  
+      if @admin.save 
+        @admin.update(activated: true)
         render 'create', status: :created
       else
         render json: { error: 'Failed to create admin', errors: @admin.errors.full_messages }, status: :unprocessable_entity
