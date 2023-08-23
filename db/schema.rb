@@ -28,6 +28,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_12_020753) do
     t.string "lastname"
     t.string "email"
     t.string "password_digest"
+    t.boolean "activated"
     t.string "token"
     t.string "reset_token"
     t.string "otp_secret_key"

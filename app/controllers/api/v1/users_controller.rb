@@ -21,9 +21,7 @@
 
       if @user.save
         UserMailer.welcome_email(@user).deliver_later
-        token = encode_token(id: @user.id)
-        @user.update(token: token)
-        response_headers(@user, token)
+        @user.update(activated: false)
         render 'create', status: :created
       else 
         render 'create', status: :unprocessable_entity
@@ -71,7 +69,7 @@
     private
 
     def user_params
-      params.require(:user).permit(:firstname, :lastname, :email, :password, :password_confirmation)
+      params.require(:user).permit(:firstname, :lastname, :email, :password, :password_confirmation, :otp_enabled, :activated)
     end
 
     def authorized_admin

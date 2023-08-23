@@ -102,18 +102,6 @@ RSpec.describe "Api::V1::Users", type: :request do
       it 'returns the user json with the expected keys' do
         expect(json['data'].size).to eq(6)
       end
-
-      it 'returns authorization header' do
-        expect(response.headers['Authorization']).to match(/^Bearer .+/)
-      end
-
-      it 'returns X-REQUEST-ID header' do
-        expect(response.headers).to include('X-REQUEST-ID')
-      end
-
-      it 'returns a stockify client header' do
-        expect(response.headers['client']).to include('stockify')
-      end
     end
 
     context 'with invalid user params' do
