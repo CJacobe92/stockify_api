@@ -14,8 +14,12 @@ class Api::V1::AuthController < ApplicationController
     user = User.find_by(email: email)
     admin = Admin.find_by(email: email)
 
-    if user&.authenticate(password) && user.activated
-      handle_successful_login(user)
+    if user&.authenticate(password)
+      if user.activated? && user.otp_enabled?
+          handle_successful_login(user)
+      elsif 
+          handle_successful_login(user)
+      end
     elsif admin&.authenticate(password)
       handle_successful_login(admin)
     else
@@ -77,20 +81,25 @@ class Api::V1::AuthController < ApplicationController
 
   def configure_otp
     user = User.find(params[:id])
-    secret_key = ROTP::Base32.random
-    user.update(otp_secret_key: secret_key)
 
-    totp = ROTP::TOTP.new(issuer: 'Stockify')
-    provisioning_uri = totp.provisioning_uri(user.email)
-    qrcode = RQRCode::QRCode.new(provisioning_uri)
-    svg = qrcode.as_svg(module_size: 4)
-    svg_base64 = Base64.encode64(svg)
+    if user.otp_enabled? 
+      render json: {error: '2FA already registered'}, status: :unauthorized
+    else
+      secret_key = ROTP::Base32.random
+      user.update(otp_secret_key: secret_key)
 
-    render json: {
-      provisioning_uri: provisioning_uri,
-      qrcode: svg_base64,
-      key: secret_key
-    }, status: :ok
+      totp = ROTP::TOTP.new(issuer: 'Stockify')
+      provisioning_uri = totp.provisioning_uri(user.email)
+      qrcode = RQRCode::QRCode.new(provisioning_uri)
+      svg = qrcode.as_svg(module_size: 4)
+      svg_base64 = Base64.encode64(svg)
+
+      render json: {
+        provisioning_uri: provisioning_uri,
+        qrcode: svg_base64,
+        key: secret_key
+      }, status: :ok
+    end
   end
 
   def enable_otp
