@@ -19,6 +19,8 @@ class ApplicationController < ActionController::API
       id = data['id']
     
       if data && expiry <= Time.now
+        user = User.find_by(id: id)
+        user.update(otp_required: true)
         render json: { error: 'Token expired'}, status: :unauthorized
         return
       end
@@ -31,8 +33,11 @@ class ApplicationController < ActionController::API
 
       if verified_user && verified_user.token == sanitized_header
         @current_user = verified_user
+        response.headers['Otp_required'] = @current_user.otp_required
       elsif verified_admin && verified_admin.token == sanitized_header
         @current_admin = verified_admin
+      else
+        verified_user.update(otp_required: true)
       end
     rescue JWT::DecodeError => e
       render json: { error: e.message }, status: :unauthorized    

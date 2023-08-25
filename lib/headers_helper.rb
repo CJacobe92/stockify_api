@@ -5,6 +5,6 @@ module HeadersHelper
     response.headers['Client'] = 'stockify'
     response.headers['Activated'] = account.activated
     response.headers['Otp_enabled'] = account.otp_enabled
-   
+    response.headers['Otp_required'] = account.otp_required
    end
 end

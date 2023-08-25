@@ -15,7 +15,7 @@ class Api::V1::AuthController < ApplicationController
     admin = Admin.find_by(email: email)
 
     if user&.authenticate(password)
-      if user.activated? && user.otp_enabled?
+      if user.activated? && user.otp_enabled? 
           handle_successful_login(user)
       elsif 
           handle_successful_login(user)
@@ -25,6 +25,14 @@ class Api::V1::AuthController < ApplicationController
     else
       handle_failed_login
     end
+  end
+
+  def logout
+    user = User.find(params[:id])
+    
+    user.update(token: nil, otp_required: true)
+
+    render json: {message: 'Logout successful'}, status: :ok
   end
 
   def password_reset
@@ -88,10 +96,10 @@ class Api::V1::AuthController < ApplicationController
       secret_key = ROTP::Base32.random
       user.update(otp_secret_key: secret_key)
 
-      totp = ROTP::TOTP.new(issuer: 'Stockify')
+      totp = ROTP::TOTP.new(secret_key, issuer: 'Stockify')
       provisioning_uri = totp.provisioning_uri(user.email)
       qrcode = RQRCode::QRCode.new(provisioning_uri)
-      svg = qrcode.as_svg(module_size: 4)
+      svg = qrcode.as_svg(module_size: 12)
       svg_base64 = Base64.encode64(svg)
 
       render json: {
@@ -110,7 +118,7 @@ class Api::V1::AuthController < ApplicationController
     if totp.verify(otp_code)
       # OTP code is valid
       token = encode_token(id: user.id)
-      user.update(token: token, otp_enabled: true)
+      user.update(token: token, otp_enabled: true, otp_required: false)
       response_headers(user, token)
       render json: { message: 'OTP code is valid' }, status: :ok
     else
@@ -127,7 +135,7 @@ class Api::V1::AuthController < ApplicationController
     if totp.verify(otp_code)
       # OTP code is valid
       token = encode_token(id: user.id)
-      user.update(token: token)
+      user.update(token: token, otp_required: false)
       response_headers(user, token)
       render json: { message: 'OTP code is valid' }, status: :ok
     else

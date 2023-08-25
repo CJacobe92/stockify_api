@@ -8,6 +8,7 @@ class CreateAdmins < ActiveRecord::Migration[7.0]
       t.boolean :activated
       t.string :token
       t.string :reset_token
+      t.string :otp_required
       t.string :otp_secret_key
       t.boolean :otp_enabled, default: false
 
