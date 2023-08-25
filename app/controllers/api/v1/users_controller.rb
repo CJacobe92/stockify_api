@@ -22,9 +22,9 @@
       if @user.save
         UserMailer.welcome_email(@user).deliver_later
         @user.update(activated: false)
-        render 'create', status: :created
+        render json:{message: 'Registration successful'}, status: :created
       else 
-        render 'create', status: :unprocessable_entity
+        render json: {error: 'Registration failed'}, status: :unprocessable_entity
       end
     end
 
