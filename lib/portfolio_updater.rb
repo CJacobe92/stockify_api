@@ -2,16 +2,22 @@ module PortfolioUpdater
 
   def recalculate_global_values(existing_portfolio)
 
+    sp = StockPrice.find(existing_portfolio.stock_id)
+    current_price = sp&.price
+
     # Calculate total_gl and percent_change
     average_purchase_price = calculate_avg_purchase_price(existing_portfolio.total_value, existing_portfolio.total_quantity)
-    total_gl = calculate_total_gl(existing_portfolio.current_price, existing_portfolio.average_purchase_price, existing_portfolio.total_quantity)
+    total_gl = calculate_total_gl(sp.price, existing_portfolio.average_purchase_price, existing_portfolio.total_quantity)
     percent_change = calculate_percent_change(total_gl, existing_portfolio.total_value)
+    total_value = current_price * existing_portfolio.total_quantity
 
     # Update the calculated fields
     existing_portfolio.update(
+      current_price: sp.price,
       total_gl: total_gl.round(2), 
       percent_change: percent_change.round(2),
-      average_purchase_price: average_purchase_price
+      average_purchase_price: average_purchase_price,
+      total_value: total_value
     ) if existing_portfolio.present?
   end
 
