@@ -30,7 +30,7 @@ class Portfolio < ApplicationRecord
     existing_portfolio = self.find_by(stock: stock)
     
     total_quantity = existing_portfolio.total_quantity + quantity
-    total_value =  existing_portfolio.total_value + total_cash_value
+    total_value = current_price * total_quantity
 
     existing_portfolio.update(
       current_price: current_price,
@@ -53,7 +53,7 @@ class Portfolio < ApplicationRecord
       return
     else 
       total_quantity = existing_portfolio.total_quantity - quantity
-      total_value =  existing_portfolio.total_value - total_cash_value
+      total_value =  current_price * total_quantity
 
       existing_portfolio.update(
         current_price: current_price,
