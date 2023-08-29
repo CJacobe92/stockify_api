@@ -13,9 +13,9 @@ module PortfolioUpdater
 
     # Update the calculated fields
     existing_portfolio.update(
-      current_price: sp.price,
-      total_gl: total_gl.round(2), 
-      percent_change: percent_change.round(2),
+      current_price: current_price,
+      total_gl: total_gl, 
+      percent_change: percent_change,
       total_value: total_value
     ) if existing_portfolio.present?
   end
@@ -29,7 +29,7 @@ module PortfolioUpdater
   end
 
   def calculate_percent_change(total_gl, total_value)
-    if total_gl !=0
+    if total_gl !=0.0
       percent_change = ( total_gl / total_value) * 100
     else
       percent_change = 0
@@ -43,5 +43,4 @@ module PortfolioUpdater
       total_gl = 0
     end
   end
-
 end

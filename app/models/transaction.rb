@@ -29,7 +29,7 @@ class Transaction < ApplicationRecord
     sp = stock.stock_prices.find_by(stock: stock)
 
     purchase_price = sp&.price
-    total_cash_value = quantity * purchase_price
+    total_cash_value = (quantity * purchase_price)
     starting_balance =  account.balance
     
     if total_cash_value > starting_balance
@@ -56,7 +56,7 @@ class Transaction < ApplicationRecord
     sp = stock.stock_prices.find_by(stock: stock)
 
     sell_price = sp&.price
-    total_cash_value = quantity * sell_price
+    total_cash_value = (quantity * sell_price)
     starting_balance =  account.balance
 
     Portfolio.update_portfolio_for_sell(stock, account, quantity, total_cash_value)
