@@ -2,6 +2,7 @@ class Portfolio < ApplicationRecord
   belongs_to :account
   belongs_to :stock
 
+
   def self.create_portfolio(stock, account)
     existing_portfolio = self.find_by(stock: stock)
     sp = stock.stock_prices.find_by(stock: stock)
@@ -84,8 +85,8 @@ class Portfolio < ApplicationRecord
 
       # Update the calculated fields
       existing_portfolio.update(
-        total_gl: total_gl.round(2), 
-        percent_change: percent_change.round(2),
+        total_gl: total_gl, 
+        percent_change: percent_change,
         average_purchase_price: average_purchase_price
       ) if existing_portfolio.present?
   end
@@ -113,6 +114,5 @@ class Portfolio < ApplicationRecord
       total_gl = 0
     end
   end
-
 end
 
