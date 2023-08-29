@@ -16,6 +16,7 @@ class Portfolio < ApplicationRecord
         total_value: 0,
         percent_change: 0,
         total_gl: 0,
+        total_cash_value: 0,
         stock: stock,
         account: account
       )
@@ -31,11 +32,13 @@ class Portfolio < ApplicationRecord
     
     total_quantity = existing_portfolio.total_quantity + quantity
     total_value = current_price * total_quantity
+    total_cash_value =  existing_portfolio.total_cash_value + total_cash_value
 
     existing_portfolio.update(
       current_price: current_price,
       total_quantity: total_quantity,
-      total_value: total_value
+      total_value: total_value,
+      total_cash_value: total_cash_value
     )
     
     recalculate_global_values(existing_portfolio) if existing_portfolio.present?
@@ -54,12 +57,15 @@ class Portfolio < ApplicationRecord
     else 
       total_quantity = existing_portfolio.total_quantity - quantity
       total_value =  current_price * total_quantity
+      total_cash_value =  existing_portfolio.total_cash_value - total_cash_value
 
       existing_portfolio.update(
         current_price: current_price,
         total_quantity: total_quantity,
-        total_value: total_value
+        total_value: total_value,
+        total_cash_value: total_cash_value
       )
+
       account.update_account_balance_for_total_gl(account, existing_portfolio.total_gl)
       recalculate_global_values(existing_portfolio) if existing_portfolio.present?
     end
@@ -72,7 +78,7 @@ class Portfolio < ApplicationRecord
 
   
       # Calculate total_gl and percent_change
-      average_purchase_price = calculate_avg_purchase_price(existing_portfolio.total_value, existing_portfolio.total_quantity)
+      average_purchase_price = calculate_avg_purchase_price(existing_portfolio.total_cash_value, existing_portfolio.total_quantity)
       total_gl = calculate_total_gl(existing_portfolio.current_price, existing_portfolio.average_purchase_price, existing_portfolio.total_quantity)
       percent_change = calculate_percent_change(total_gl, existing_portfolio.total_value)
 

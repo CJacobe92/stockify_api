@@ -47,6 +47,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_12_020753) do
     t.integer "total_quantity"
     t.decimal "total_value"
     t.decimal "total_gl"
+    t.decimal "total_cash_value"
     t.bigint "account_id", null: false
     t.bigint "stock_id"
     t.datetime "created_at", null: false

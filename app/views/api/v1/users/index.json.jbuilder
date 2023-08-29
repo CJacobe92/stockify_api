@@ -25,6 +25,7 @@ json.data do
                 :total_quantity,
                 :average_purchase_price, 
                 :total_value,
+                :total_cash_value,
                 :total_gl, 
                 :stock_id, 
                 :account_id,
