@@ -55,7 +55,9 @@ class Portfolio < ApplicationRecord
     if quantity > existing_portfolio.total_quantity
       raise StandardError, 'Quantity being sold is greater than owned assets.'
       return
-    else 
+    elsif existing_portfolio.total_quantity < 1
+      existing_portfolio.destroy
+    else
       total_quantity = existing_portfolio.total_quantity - quantity
       total_value =  current_price * total_quantity
       total_cash_value =  existing_portfolio.total_cash_value - total_cash_value
