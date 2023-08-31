@@ -51,17 +51,18 @@ class Portfolio < ApplicationRecord
     current_price = sp&.price
 
     existing_portfolio = self.find_by(stock: stock)
+    total_quantity = existing_portfolio.total_quantity - quantity
+    total_value =  current_price * total_quantity
+    total_cash_value =  existing_portfolio.total_cash_value - total_cash_value
 
-    if quantity > existing_portfolio.total_quantity
+    if existing_portfolio.total_quantity < quantity
       raise StandardError, 'Quantity being sold is greater than owned assets.'
       return
-    elsif existing_portfolio.total_quantity < 1
+    elsif total_quantity < 1
+      account.update_account_balance_for_total_gl(account, existing_portfolio.total_gl)
       existing_portfolio.destroy
+      
     else
-      total_quantity = existing_portfolio.total_quantity - quantity
-      total_value =  current_price * total_quantity
-      total_cash_value =  existing_portfolio.total_cash_value - total_cash_value
-
       existing_portfolio.update(
         current_price: current_price,
         total_quantity: total_quantity,
