@@ -5,13 +5,16 @@ class Api::V1::TransactionsController < ApplicationController
   before_action :find_account, only: [:create]
 
   def create
-
-    @transaction = @current_account.transactions.create(transaction_params)
-    
-    if @transaction.save
-      render json: { message: @transaction }, status: :created 
-    else
-      render json: {error: @transaction.errors.full_messages}, status: :unprocessable_entity
+    begin
+      @transaction = @current_account.transactions.create(transaction_params)
+      
+      if @transaction.save
+        render json: { message: @transaction }, status: :created 
+      else
+        render json: { error: @transaction.errors.full_messages }, status: :unprocessable_entity
+      end
+    rescue StandardError => e
+      render json: { error: e.message }, status: :unprocessable_entity
     end
   end
   

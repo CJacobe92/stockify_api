@@ -24,7 +24,7 @@
         @user.update(activated: false)
         render json:{message: 'Registration successful'}, status: :created
       else 
-        render json: {error: 'Registration failed'}, status: :unprocessable_entity
+        render json: {error: @user.errors.full_messages.join(' ')}, status: :unprocessable_entity
       end
     end
 
