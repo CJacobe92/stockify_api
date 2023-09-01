@@ -158,7 +158,7 @@ class Api::V1::AuthController < ApplicationController
   end
 
   def handle_failed_login
-    render json: {error: 'Invalid login credentials or account is not yet activated'}, status: :unauthorized
+    render json: {error: 'Login failed'}, status: :unauthorized
   end
 
 end
