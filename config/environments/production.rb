@@ -91,7 +91,7 @@ Rails.application.configure do
   GMAIL_PASSWORD = Rails.application.credentials.smtp[:gmail_password]
 
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.default_url_options = { host: "https://cjacobestockify.vercel.app/", protocol: "https" }
+  config.action_mailer.default_url_options = { host: "https://cjstockify.vercel.app", protocol: "https" }
   config.action_mailer.perform_deliveries = true
   config.action_mailer.default :charset => "utf-8"
   config.action_mailer.delivery_method = :smtp
