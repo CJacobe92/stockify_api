@@ -2,26 +2,22 @@ class Portfolio < ApplicationRecord
   belongs_to :account
   belongs_to :stock
 
-
   def self.create_portfolio(stock, account)
-    existing_portfolio = self.find_by(stock: stock)
     sp = stock.stock_prices.find_by(stock: stock)
 
-    if existing_portfolio.nil?
     portfolio = account.portfolios.create(
-        symbol: sp&.symbol,
-        description: sp&.name,
-        current_price: 0,
-        average_purchase_price: 0,
-        total_quantity: 0,
-        total_value: 0,
-        percent_change: 0,
-        total_gl: 0,
-        total_cash_value: 0,
-        stock: stock,
-        account: account
-      )
-    end
+      symbol: sp&.symbol,
+      description: sp&.name,
+      current_price: 0,
+      average_purchase_price: 0,
+      total_quantity: 0,
+      total_value: 0,
+      percent_change: 0,
+      total_gl: 0,
+      total_cash_value: 0,
+      stock: stock,
+      account: account
+    )
   end
 
   def self.update_portfolio_for_buy(stock, account, quantity, total_cash_value)
@@ -79,8 +75,6 @@ class Portfolio < ApplicationRecord
   private
 
   def self.recalculate_global_values(existing_portfolio)
-
-  
       # Calculate total_gl and percent_change
       average_purchase_price = calculate_avg_purchase_price(existing_portfolio.total_cash_value, existing_portfolio.total_quantity)
       total_gl = calculate_total_gl(existing_portfolio.current_price, existing_portfolio.average_purchase_price, existing_portfolio.total_quantity)
@@ -117,5 +111,6 @@ class Portfolio < ApplicationRecord
       total_gl = 0
     end
   end
+
 end
 
