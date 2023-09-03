@@ -6,7 +6,7 @@ class Api::V1::TransactionsController < ApplicationController
 
   def create
     begin
-      @transaction = @current_account.transactions.create(transaction_params)
+      @transaction = @current_account.transactions.new(transaction_params)
       
       if @transaction.save
         render json: { message: @transaction }, status: :created 
