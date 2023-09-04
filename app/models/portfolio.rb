@@ -43,21 +43,25 @@ class Portfolio < ApplicationRecord
     
   def self.update_portfolio_for_sell(stock, account, quantity, total_cash_value)
 
+    existing_portfolio = self.find_by(stock: stock)
+
+    if existing_portfolio.nil?
+      raise StandardError, 'Cannot sell unowned assets.'
+    end
+
     sp = stock.stock_prices.find_by(stock: stock)
     current_price = sp&.price
-
-    existing_portfolio = self.find_by(stock: stock)
     total_quantity = existing_portfolio.total_quantity - quantity
     total_value =  current_price * total_quantity
     total_cash_value =  existing_portfolio.total_cash_value - total_cash_value
 
-    if existing_portfolio.total_quantity < quantity
+    if quantity > existing_portfolio.total_quantity
       raise StandardError, 'Quantity being sold is greater than owned assets.'
-      return
-    elsif total_quantity < 1
+    end
+    
+    if total_quantity < 1
       account.update_account_balance_for_total_gl(account, existing_portfolio.total_gl)
       existing_portfolio.destroy
-      
     else
       existing_portfolio.update(
         current_price: current_price,
@@ -69,7 +73,6 @@ class Portfolio < ApplicationRecord
       account.update_account_balance_for_total_gl(account, existing_portfolio.total_gl)
       recalculate_global_values(existing_portfolio) if existing_portfolio.present?
     end
-
   end
 
   private

@@ -11,7 +11,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
 
     resource "*",
       headers: :any,
-      expose: ['Uid', 'Authorization', 'Client', 'Otp_enabled', 'Otp_required', 'Activated', 'Token_expired'],
+      expose: ['Uid', 'Authorization', 'Client', 'Otp_enabled', 'Otp_required', 'Activated', 'Token_expired', 'User-Type'],
       methods: [:get, :post, :put, :patch, :delete, :options, :head]
   end
 end
