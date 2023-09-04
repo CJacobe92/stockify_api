@@ -16,7 +16,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_12_020753) do
 
   create_table "accounts", force: :cascade do |t|
     t.string "name"
-    t.decimal "balance"
+    t.decimal "balance", precision: 10, scale: 2
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -41,13 +41,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_12_020753) do
   create_table "portfolios", force: :cascade do |t|
     t.string "symbol"
     t.string "description"
-    t.decimal "current_price"
-    t.decimal "percent_change"
-    t.decimal "average_purchase_price"
+    t.decimal "current_price", precision: 10, scale: 2
+    t.decimal "percent_change", precision: 10, scale: 2
+    t.decimal "average_purchase_price", precision: 10, scale: 2
     t.integer "total_quantity"
-    t.decimal "total_value"
-    t.decimal "total_gl"
-    t.decimal "total_cash_value"
+    t.decimal "total_value", precision: 10, scale: 2
+    t.decimal "total_gl", precision: 10, scale: 2
+    t.decimal "total_cash_value", precision: 10, scale: 2
     t.bigint "account_id", null: false
     t.bigint "stock_id"
     t.datetime "created_at", null: false
@@ -59,7 +59,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_12_020753) do
   create_table "stock_prices", force: :cascade do |t|
     t.string "name"
     t.string "symbol"
-    t.decimal "price"
+    t.decimal "price", precision: 10, scale: 2
     t.decimal "percent_change"
     t.integer "volume"
     t.string "currency"
@@ -79,9 +79,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_12_020753) do
   create_table "transactions", force: :cascade do |t|
     t.string "transaction_type"
     t.integer "quantity"
-    t.decimal "price"
+    t.decimal "price", precision: 10, scale: 2
     t.string "symbol"
-    t.decimal "total_cash_value"
+    t.decimal "total_cash_value", precision: 10, scale: 2
     t.bigint "account_id", null: false
     t.bigint "stock_id"
     t.datetime "created_at", null: false

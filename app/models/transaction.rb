@@ -13,9 +13,7 @@ class Transaction < ApplicationRecord
     if transaction_type == 'buy'
       if existing_portfolio.nil?
         portfolio = Portfolio.create_portfolio(stock, account)
-        transaction_for_buy(stock, account, quantity)
       end
-      
       transaction_for_buy(stock, account, quantity)
     end
 

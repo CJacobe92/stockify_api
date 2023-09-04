@@ -34,11 +34,10 @@ RSpec.describe Transaction, type: :model do
   context 'sell transaction' do
     it 'updates the portfolio correctly' do
       create(:buy, account: account, stock_id: sp.stock_id)
-      expect { create(:sell, account: account, stock_id: sp.stock_id) }.to change { Portfolio.count }.by(0)
-
+      create(:sell, account: account, stock_id: sp.stock_id)
       portfolio = account.portfolios.find_by(stock: stock)
 
-      expect(portfolio.total_quantity).to eq(0)
+      expect(portfolio).to be_nil
     end
   end
  

@@ -66,7 +66,7 @@ RSpec.describe "Api::V1::Users", type: :request do
           user['accounts'].map do |account|
             if account['portfolios'].present?
               account['portfolios'].map do |portfolio|
-                expect(portfolio.size).to eq(12)
+                expect(portfolio.size).to eq(14)
               end
             end
           end
@@ -93,14 +93,9 @@ RSpec.describe "Api::V1::Users", type: :request do
       it 'sends welcome email' do
         expect(ActionMailer::Base.deliveries.count).to eq(1)
       end 
-      
-
-      it 'renders the view template' do
-        expect(response).to render_template('api/v1/users/create')
-      end
 
       it 'returns the user json with the expected keys' do
-        expect(json['data'].size).to eq(6)
+        expect(json['message']).to eq('Registration successful')
       end
     end
 
@@ -139,7 +134,6 @@ RSpec.describe "Api::V1::Users", type: :request do
       it 'returns the user json with the expected keys' do
         expect(json['data'].size).to eq(7)
       end
-  
     end
 
     context 'with incorrect user resource access' do

@@ -2,7 +2,6 @@ module PortfolioUpdater
 
   def recalculate_global_values(existing_portfolio)
     
-    print 'Portfolio update run'
     sp = StockPrice.find(existing_portfolio.stock_id)
     current_price = sp&.price
 

@@ -6,5 +6,6 @@ module HeadersHelper
     response.headers['Activated'] = account.activated
     response.headers['Otp_enabled'] = account.otp_enabled
     response.headers['Otp_required'] = account.otp_required
+    response.headers['User-Type'] = account.is_a?(Admin) ? 'Admin' : 'User'
    end
 end
