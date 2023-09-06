@@ -146,7 +146,7 @@ RSpec.describe "Api::V1::Auth", type: :request do
       end
 
       it 'returns the correct message' do
-        expect(json['message']).to eq("Password reset email for #{user.email}")
+        expect(json['message']).to eq("Password reset email sent for #{user.email}")
       end
 
       it 'generate and update the reset token for the user' do

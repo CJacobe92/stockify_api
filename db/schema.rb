@@ -16,6 +16,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_12_020753) do
 
   create_table "accounts", force: :cascade do |t|
     t.string "name"
+    t.integer "account_number"
     t.decimal "balance", precision: 10, scale: 2
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
@@ -81,6 +82,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_12_020753) do
     t.integer "quantity"
     t.decimal "price", precision: 10, scale: 2
     t.string "symbol"
+    t.integer "account_number"
     t.decimal "total_cash_value", precision: 10, scale: 2
     t.bigint "account_id", null: false
     t.bigint "stock_id"
