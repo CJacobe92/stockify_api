@@ -35,7 +35,7 @@ RSpec.describe "Api::V1::Users", type: :request do
 
       it 'returns the users json with the expected keys' do
         json['data'].map do |user|
-          expect(user.size).to eq(7)
+          expect(user.size).to eq(10)
         end
       end
 
