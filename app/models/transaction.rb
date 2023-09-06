@@ -39,7 +39,7 @@ class Transaction < ApplicationRecord
     else
       Portfolio.update_portfolio_for_buy(stock, account, quantity, total_cash_value)
 
-      update_transaction_record(price, symbol, total_cash_value)
+      update_transaction_record(price, symbol, total_cash_value, account)
   
       ending_balance = starting_balance - total_cash_value
       account.update_account_balance(account, ending_balance.round(2))
@@ -59,7 +59,7 @@ class Transaction < ApplicationRecord
     starting_balance =  account.balance
 
     Portfolio.update_portfolio_for_sell(stock, account, quantity, total_cash_value)
-    update_transaction_record(price, symbol, total_cash_value)
+    update_transaction_record(price, symbol, total_cash_value, account)
 
     ending_balance = starting_balance + total_cash_value
     account.update_account_balance(account, ending_balance.round(2))
@@ -70,7 +70,8 @@ class Transaction < ApplicationRecord
 
   end
 
-  def update_transaction_record(price, symbol, total_cash_value)
+  def update_transaction_record(price, symbol, total_cash_value, account)
+    self.account_number = account.account_number
     self.price = price
     self.symbol = symbol
     self.total_cash_value = total_cash_value

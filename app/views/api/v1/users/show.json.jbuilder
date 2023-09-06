@@ -9,7 +9,8 @@ json.data do
     json.accounts @current_user.accounts do |account|
       json.extract! account, 
         :id, 
-        :name, 
+        :name,
+        :account_number,
         :balance, 
         :created_at, 
         :updated_at
@@ -41,6 +42,7 @@ json.data do
               :price, 
               :symbol,
               :total_cash_value,
+              :account_number,
               :stock_id, 
               :account_id, 
               :created_at, 

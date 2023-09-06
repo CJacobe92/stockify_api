@@ -24,11 +24,11 @@ user = User.create({
 })
 
 if user
-  10.times do |n|
+  19.times do |n|
     User.create(
       firstname: 'test',
       lastname: "user#{n + 1}",
-      email: "test.user#{n + 1}@example.com",
+      email: "test.user#{n + 1}@email.com",
       password: 'password',
       password_confirmation: 'password',
     )

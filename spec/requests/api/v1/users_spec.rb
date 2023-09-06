@@ -43,7 +43,7 @@ RSpec.describe "Api::V1::Users", type: :request do
         json['data'].map do |user|
           user['accounts'].map do |account|
             if account['transactions'].present? && account['portfolios'].present?
-              expect(account.size).to eq(7)
+              expect(account.size).to eq(8)
             end
           end
         end
@@ -54,7 +54,7 @@ RSpec.describe "Api::V1::Users", type: :request do
           user['accounts'].map do |account|
             if account['transactions'].present?
               account['transactions'].map do |transaction|
-                expect(transaction.size).to eq(10)
+                expect(transaction.size).to eq(11)
               end
             end
           end

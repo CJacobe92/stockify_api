@@ -14,7 +14,7 @@
       <img src="./assets/0.12.3/loading.gif" alt="loading"/>
     </div>
     <div id="wrapper" class="hide">
-      <div class="timestamp">Generated <abbr class="timeago" title="2023-09-04T16:53:26+08:00">2023-09-04T16:53:26+08:00</abbr></div>
+      <div class="timestamp">Generated <abbr class="timeago" title="2023-09-06T21:14:57+08:00">2023-09-06T21:14:57+08:00</abbr></div>
       <ul class="group_tabs"></ul>
 
       <div id="content">
@@ -23,14 +23,14 @@
     <span class="group_name">All Files</span>
     (<span class="covered_percent">
       <span class="green">
-  98.43%
+  98.37%
 </span>
 
      </span>
      covered at
      <span class="covered_strength">
        <span class="green">
-         7.98
+         8.53
        </span>
     </span> hits/line
     )
@@ -43,11 +43,11 @@
   </div>
 
   <div class="t-line-summary">
-    <b>1340</b> relevant lines,
-    <span class="green"><b>1319</b> lines covered</span> and
-    <span class="red"><b>21</b> lines missed. </span>
+    <b>1346</b> relevant lines,
+    <span class="green"><b>1324</b> lines covered</span> and
+    <span class="red"><b>22</b> lines missed. </span>
     (<span class="green">
-  98.43%
+  98.37%
 </span>
 )
   </div>
@@ -227,22 +227,22 @@
           <tr class="t-file">
             <td class="strong t-file__name"><a href="#cb411305cd8d96b0bb9f9ecbcf123c8df9b0ffa9" class="src_link" title="app/models/transaction.rb">app/models/transaction.rb</a></td>
             <td class="green strong cell--number t-file__coverage">100.00 %</td>
-            <td class="cell--number">79</td>
-            <td class="cell--number">45</td>
-            <td class="cell--number">45</td>
+            <td class="cell--number">80</td>
+            <td class="cell--number">46</td>
+            <td class="cell--number">46</td>
             <td class="cell--number">0</td>
-            <td class="cell--number">39.58</td>
+            <td class="cell--number">40.54</td>
             
           </tr>
         
           <tr class="t-file">
             <td class="strong t-file__name"><a href="#9f9538e7cd3a9d2875c2b6ecbb4c09d9d0b590f9" class="src_link" title="app/models/user.rb">app/models/user.rb</a></td>
-            <td class="green strong cell--number t-file__coverage">100.00 %</td>
-            <td class="cell--number">19</td>
-            <td class="cell--number">11</td>
-            <td class="cell--number">11</td>
-            <td class="cell--number">0</td>
-            <td class="cell--number">16.91</td>
+            <td class="green strong cell--number t-file__coverage">93.75 %</td>
+            <td class="cell--number">28</td>
+            <td class="cell--number">16</td>
+            <td class="cell--number">15</td>
+            <td class="cell--number">1</td>
+            <td class="cell--number">55.63</td>
             
           </tr>
         
@@ -2129,7 +2129,7 @@
 
             
 
-            <code class="ruby">      render json: {message: &quot;Password reset email for #{user.email}&quot;, token: token}, status: :ok</code>
+            <code class="ruby">      render json: {message: &quot;Password reset email sent for #{user.email}&quot;, token: token}, status: :ok</code>
           </li>
         </div>
       
@@ -7729,8 +7729,8 @@
     
 
     <div class="t-line-summary">
-      <b>45</b> relevant lines.
-      <span class="green"><b>45</b> lines covered</span> and
+      <b>46</b> relevant lines.
+      <span class="green"><b>46</b> lines covered</span> and
       <span class="red"><b>0</b> lines missed.</span>
     </div>
 
@@ -8199,7 +8199,7 @@
 
             
 
-            <code class="ruby">      update_transaction_record(price, symbol, total_cash_value)</code>
+            <code class="ruby">      update_transaction_record(price, symbol, total_cash_value, account)</code>
           </li>
         </div>
       
@@ -8419,7 +8419,7 @@
 
             
 
-            <code class="ruby">    update_transaction_record(price, symbol, total_cash_value)</code>
+            <code class="ruby">    update_transaction_record(price, symbol, total_cash_value, account)</code>
           </li>
         </div>
       
@@ -8540,7 +8540,7 @@
 
             
 
-            <code class="ruby">  def update_transaction_record(price, symbol, total_cash_value)</code>
+            <code class="ruby">  def update_transaction_record(price, symbol, total_cash_value, account)</code>
           </li>
         </div>
       
@@ -8551,7 +8551,7 @@
 
             
 
-            <code class="ruby">    self.price = price</code>
+            <code class="ruby">    self.account_number = account.account_number</code>
           </li>
         </div>
       
@@ -8562,7 +8562,7 @@
 
             
 
-            <code class="ruby">    self.symbol = symbol</code>
+            <code class="ruby">    self.price = price</code>
           </li>
         </div>
       
@@ -8573,18 +8573,18 @@
 
             
 
-            <code class="ruby">    self.total_cash_value = total_cash_value</code>
+            <code class="ruby">    self.symbol = symbol</code>
           </li>
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="77">
-            
-            
-
+          <li class="covered" data-hits="84" data-linenumber="77">
+            <span class="hits">84</span>
             
 
-            <code class="ruby">  end</code>
+            
+
+            <code class="ruby">    self.total_cash_value = total_cash_value</code>
           </li>
         </div>
       
@@ -8595,12 +8595,23 @@
 
             
 
-            <code class="ruby"></code>
+            <code class="ruby">  end</code>
           </li>
         </div>
       
         <div>
           <li class="never" data-hits="" data-linenumber="79">
+            
+            
+
+            
+
+            <code class="ruby"></code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="80">
             
             
 
@@ -8620,7 +8631,7 @@
     <h3>app/models/user.rb</h3>
     <h4>
       <span class="green">
-  100.0%
+  93.75%
 </span>
 
       lines covered
@@ -8629,9 +8640,9 @@
     
 
     <div class="t-line-summary">
-      <b>11</b> relevant lines.
-      <span class="green"><b>11</b> lines covered</span> and
-      <span class="red"><b>0</b> lines missed.</span>
+      <b>16</b> relevant lines.
+      <span class="green"><b>15</b> lines covered</span> and
+      <span class="red"><b>1</b> lines missed.</span>
     </div>
 
     
@@ -8824,12 +8835,100 @@
 
             
 
-            <code class="ruby">       accounts.build({name: &#39;starter&#39;, balance: 1000})</code>
+            <code class="ruby">        min_number = 100_000</code>
           </li>
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="18">
+          <li class="covered" data-hits="176" data-linenumber="18">
+            <span class="hits">176</span>
+            
+
+            
+
+            <code class="ruby">        max_number = 999_999</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="covered" data-hits="176" data-linenumber="19">
+            <span class="hits">176</span>
+            
+
+            
+
+            <code class="ruby">        new_account_number = rand(min_number..max_number)</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="20">
+            
+            
+
+            
+
+            <code class="ruby">        </code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="covered" data-hits="176" data-linenumber="21">
+            <span class="hits">176</span>
+            
+
+            
+
+            <code class="ruby">        while Account.exists?(account_number: new_account_number)</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="22">
+            
+            
+
+            
+
+            <code class="ruby">            new_account_number = rand(min_number..max_number)</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="23">
+            
+            
+
+            
+
+            <code class="ruby">        end</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="24">
+            
+            
+
+            
+
+            <code class="ruby">        </code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="covered" data-hits="176" data-linenumber="25">
+            <span class="hits">176</span>
+            
+
+            
+
+            <code class="ruby">        accounts.build(name: &#39;starter&#39;, balance: 1000, account_number: new_account_number)</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="26">
             
             
 
@@ -8840,7 +8939,18 @@
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="19">
+          <li class="never" data-hits="" data-linenumber="27">
+            
+            
+
+            
+
+            <code class="ruby">    </code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="28">
             
             
 
@@ -10288,7 +10398,7 @@
 
             
 
-            <code class="ruby">      expose: [&#39;Uid&#39;, &#39;Authorization&#39;, &#39;Client&#39;, &#39;Otp_enabled&#39;, &#39;Otp_required&#39;, &#39;Activated&#39;, &#39;Token_expired&#39;, &#39;User-Type&#39;],</code>
+            <code class="ruby">      expose: [&#39;uid&#39;, &#39;authorization&#39;, &#39;client&#39;, &#39;otp_enabled&#39;, &#39;otp_required&#39;, &#39;activated&#39;, &#39;token_expired&#39;, &#39;user_type&#39;],</code>
           </li>
         </div>
       
@@ -11127,7 +11237,7 @@
 
             
 
-            <code class="ruby">    response.headers[&#39;Uid&#39;] = account.id</code>
+            <code class="ruby">    response.headers[&#39;uid&#39;] = account.id</code>
           </li>
         </div>
       
@@ -11138,7 +11248,7 @@
 
             
 
-            <code class="ruby">    response.headers[&#39;Authorization&#39;] = &quot;Bearer #{token}&quot;</code>
+            <code class="ruby">    response.headers[&#39;authorization&#39;] = &quot;Bearer #{token}&quot;</code>
           </li>
         </div>
       
@@ -11149,7 +11259,7 @@
 
             
 
-            <code class="ruby">    response.headers[&#39;Client&#39;] = &#39;stockify&#39;</code>
+            <code class="ruby">    response.headers[&#39;client&#39;] = &#39;stockify&#39;</code>
           </li>
         </div>
       
@@ -11160,7 +11270,7 @@
 
             
 
-            <code class="ruby">    response.headers[&#39;Activated&#39;] = account.activated</code>
+            <code class="ruby">    response.headers[&#39;activated&#39;] = account.activated</code>
           </li>
         </div>
       
@@ -11171,7 +11281,7 @@
 
             
 
-            <code class="ruby">    response.headers[&#39;Otp_enabled&#39;] = account.otp_enabled</code>
+            <code class="ruby">    response.headers[&#39;otp_enabled&#39;] = account.otp_enabled</code>
           </li>
         </div>
       
@@ -11182,7 +11292,7 @@
 
             
 
-            <code class="ruby">    response.headers[&#39;Otp_required&#39;] = account.otp_required</code>
+            <code class="ruby">    response.headers[&#39;otp_required&#39;] = account.otp_required</code>
           </li>
         </div>
       
@@ -11193,7 +11303,7 @@
 
             
 
-            <code class="ruby">    response.headers[&#39;User-Type&#39;] = account.is_a?(Admin) ? &#39;Admin&#39; : &#39;User&#39;</code>
+            <code class="ruby">    response.headers[&#39;user_type&#39;] = account.is_a?(Admin) ? &#39;Admin&#39; : &#39;User&#39;</code>
           </li>
         </div>
       
@@ -22222,7 +22332,7 @@
 
             
 
-            <code class="ruby">        expect(json[&#39;message&#39;]).to eq(&quot;Password reset email for #{user.email}&quot;)</code>
+            <code class="ruby">        expect(json[&#39;message&#39;]).to eq(&quot;Password reset email sent for #{user.email}&quot;)</code>
           </li>
         </div>
       
@@ -27474,7 +27584,7 @@
 
             
 
-            <code class="ruby">              expect(account.size).to eq(7)</code>
+            <code class="ruby">              expect(account.size).to eq(8)</code>
           </li>
         </div>
       
@@ -27595,7 +27705,7 @@
 
             
 
-            <code class="ruby">                expect(transaction.size).to eq(10)</code>
+            <code class="ruby">                expect(transaction.size).to eq(11)</code>
           </li>
         </div>
       
