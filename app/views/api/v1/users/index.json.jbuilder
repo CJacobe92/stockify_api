@@ -4,7 +4,10 @@ json.data do
       :id, 
       :firstname, 
       :lastname, 
-      :email, 
+      :email,
+      :activated,
+      :otp_required,
+      :otp_enabled, 
       :created_at, 
       :updated_at
       json.accounts user.accounts do |account|

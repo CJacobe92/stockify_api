@@ -23,6 +23,17 @@ user = User.create({
   activated: true
 })
 
+if user
+  10.times do |n|
+    User.create(
+      firstname: 'test',
+      lastname: "user#{n + 1}",
+      email: "test.user#{n + 1}@example.com",
+      password: 'password',
+      password_confirmation: 'password',
+    )
+  end
+end
 
 api_endpoint = 'http://phisix-api2.appspot.com/stocks.json'
 response = RestClient.get(api_endpoint)

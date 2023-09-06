@@ -95,12 +95,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_12_020753) do
     t.string "lastname"
     t.string "email"
     t.string "password_digest"
-    t.boolean "activated"
+    t.boolean "activated", default: false
     t.string "token"
     t.string "reset_token"
     t.string "activation_token"
     t.string "otp_secret_key"
-    t.boolean "otp_required"
+    t.boolean "otp_required", default: true
     t.boolean "otp_enabled", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
