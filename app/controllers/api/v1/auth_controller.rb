@@ -42,7 +42,7 @@ class Api::V1::AuthController < ApplicationController
       token = encode_reset_token(id: user.id)
       user.update(reset_token: token)
       UserMailer.password_reset_email(user, token).deliver_later
-      render json: {message: "Password reset email sent for #{user.email}", token: token}, status: :ok
+      render json: {message: "Password reset email sent for #{user.email}"}, status: :ok
     else
       render json: {error: 'Email not found'}, status: :not_found
     end
@@ -68,7 +68,7 @@ class Api::V1::AuthController < ApplicationController
       token = encode_activation_token(id: user.id)
       user.update(activation_token: token)
       UserMailer.activation_email(user, token).deliver_later  
-      render json: {message: "Activation email sent for #{user.email}", token: token}, status: :ok
+      render json: {message: "Activation email sent for #{user.email}"}, status: :ok
     else
       render json: {error: 'Email not found'}, status: :not_found
     end
