@@ -6,6 +6,8 @@ set -e
 # Remove a potentially pre-existing server.pid for Rails.
 rm -f /app/tmp/pids/server.pid
 
+export RAILS_ENV=production
+
 bundle exec rails db:migrate
 bundle exec rails db:seed
 
