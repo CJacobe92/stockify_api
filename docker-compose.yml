@@ -15,7 +15,7 @@ services:
     restart: on-failure
     build:
       context: .
-      dockerfile: Dockerfile.Api
+      dockerfile: Dockerfile
     environment:
       RAILS_ENV: development
       DATABASE_URL: ${DATABASE_URL}
