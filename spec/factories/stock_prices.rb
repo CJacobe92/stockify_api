@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :stock_price do
+    sequence(:id) { |n| n }
     name {"My Corporation"}
     symbol {"MC"}
     price { "0.45" }
@@ -7,5 +8,9 @@ FactoryBot.define do
     volume { "1500" }
     currency { "PHP" }
     association :stock
+
+    after(:build) do |stock_price|
+      stock_price.stock ||= FactoryBot.create(:stock)
+    end
   end
 end

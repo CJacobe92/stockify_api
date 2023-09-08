@@ -2,43 +2,47 @@ class Portfolio < ApplicationRecord
   belongs_to :account
   belongs_to :stock
 
-  def self.create_portfolio(stock, account)
-    sp = stock.stock_prices.find_by(stock: stock)
-
-    portfolio = account.portfolios.create(
-      symbol: sp&.symbol,
-      description: sp&.name,
-      current_price: 0,
-      average_purchase_price: 0,
-      total_quantity: 0,
-      total_value: 0,
-      percent_change: 0,
-      total_gl: 0,
-      total_cash_value: 0,
-      stock: stock,
-      account: account
-    )
-  end
-
   def self.update_portfolio_for_buy(stock, account, quantity, total_cash_value)
 
     sp = stock.stock_prices.find_by(stock: stock)
+    existing_portfolio = account.portfolios.find_by(stock: stock)
+    
     current_price = sp&.price
 
-    existing_portfolio = self.find_by(stock: stock)
-    
-    total_quantity = existing_portfolio.total_quantity + quantity
-    total_value = current_price * total_quantity
-    total_cash_value =  existing_portfolio.total_cash_value + total_cash_value
+    if existing_portfolio.nil?
 
-    existing_portfolio.update(
-      current_price: current_price,
-      total_quantity: total_quantity,
-      total_value: total_value,
-      total_cash_value: total_cash_value
-    )
-    
-    recalculate_global_values(existing_portfolio) if existing_portfolio.present?
+      initialTotalValue = current_price * quantity
+      initialAvgPurchasePrice = initialTotalValue /quantity
+      initialTotalGl = current_price - initialAvgPurchasePrice * quantity
+      initialPercentChange = initialTotalGl / initialTotalValue * 100
+
+      portfolio = account.portfolios.create(
+        symbol: sp&.symbol,
+        description: sp&.name,
+        current_price: current_price,
+        average_purchase_price: initialAvgPurchasePrice,
+        total_quantity: quantity,
+        total_value: initialTotalValue,
+        percent_change: 0,
+        total_gl: 0,
+        total_cash_value: total_cash_value,
+        stock: stock,
+        account: account
+      )
+    else
+      total_quantity = existing_portfolio.total_quantity + quantity
+      total_value = current_price * total_quantity
+      total_cash_value =  existing_portfolio.total_cash_value + total_cash_value
+
+      existing_portfolio.update(
+        current_price: current_price,
+        total_quantity: total_quantity,
+        total_value: total_value,
+        total_cash_value: total_cash_value
+      )
+
+      recalculate_global_values(existing_portfolio) if existing_portfolio.present?
+    end
   end
     
   def self.update_portfolio_for_sell(stock, account, quantity, total_cash_value)

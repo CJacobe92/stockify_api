@@ -8,12 +8,8 @@ class Transaction < ApplicationRecord
   validates :quantity, presence: true, on: :create
 
   def create_or_update_user_account_portfolio
-    existing_portfolio = account.portfolios.find_by(stock: stock)
 
     if transaction_type == 'buy'
-      if existing_portfolio.nil?
-        portfolio = Portfolio.create_portfolio(stock, account)
-      end
       transaction_for_buy(stock, account, quantity)
     end
 
@@ -26,11 +22,12 @@ class Transaction < ApplicationRecord
 
   def transaction_for_buy(stock, account, quantity)
 
-    sp = stock.stock_prices.find_by(stock: stock)
-
-    price = sp&.price
+    sp = stock&.stock_prices.find_by(stock: stock)
+  
+    price = sp && sp&.price
     symbol = sp&.symbol
-    total_cash_value = (quantity * price)
+
+    total_cash_value =  price * quantity 
     starting_balance =  account.balance
     
     if total_cash_value > starting_balance
@@ -55,7 +52,7 @@ class Transaction < ApplicationRecord
 
     price = sp&.price
     symbol = sp&.symbol
-    total_cash_value = (quantity * price)
+    total_cash_value = price * quantity
     starting_balance =  account.balance
 
     Portfolio.update_portfolio_for_sell(stock, account, quantity, total_cash_value)
