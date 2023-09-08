@@ -6,17 +6,6 @@ RSpec.describe Portfolio, type: :model do
   let(:sp) { create(:stock_price, stock: stock) }
   let(:account) { create(:account) }
 
-  describe '.create_portfolio' do
-
-    it 'create new portfolio if there are no existing' do
-      existing_portfolio = Portfolio.find_by(stock_id: sp.stock_id)
-
-      expect {
-        Portfolio.create_portfolio(stock, account)
-      }.to change(Portfolio, :count).by(1)
-    end
-  end
-
   describe '.update_porfolio_for_buy' do
   
     context 'updates the necessary columns when the buy method is called' do
@@ -25,7 +14,6 @@ RSpec.describe Portfolio, type: :model do
       let(:total_cash_value){quantity * sp&.price}
 
       before do
-        Portfolio.create_portfolio(stock, account)
         Portfolio.update_portfolio_for_buy(stock, account, quantity, total_cash_value)
       end
 
@@ -55,7 +43,6 @@ RSpec.describe Portfolio, type: :model do
     end
 
     it 'raises an error when selling greater than owned assets' do
-      Portfolio.create_portfolio(stock, account)
       Portfolio.update_portfolio_for_buy(stock, account, quantity, total_cash_value)
 
       wrong_quantity = 10000
@@ -68,8 +55,6 @@ RSpec.describe Portfolio, type: :model do
     it 'destroys the portfolio when there are no longer owned assets' do
 
       quantity_being_sold = 500
-
-      Portfolio.create_portfolio(stock, account)
       Portfolio.update_portfolio_for_buy(stock, account, quantity, total_cash_value)
       Portfolio.update_portfolio_for_sell(stock, account, quantity_being_sold, total_cash_value)
 
@@ -84,7 +69,6 @@ RSpec.describe Portfolio, type: :model do
       let(:total_cash_value){quantity * sp&.price}
 
       before do
-        Portfolio.create_portfolio(stock, account)
         Portfolio.update_portfolio_for_buy(stock, account, quantity, total_cash_value)
         Portfolio.update_portfolio_for_sell(stock, account, quantity_to_sell, total_cash_value)
       end

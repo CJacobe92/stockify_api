@@ -8,7 +8,7 @@ FactoryBot.define do
 
   factory :buy, class: 'Transaction' do
     transaction_type { "buy" }
-    quantity { "500"}
+    quantity { "500" }
     association :stock
     association :account
   end
