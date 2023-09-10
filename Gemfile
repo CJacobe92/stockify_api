@@ -46,8 +46,6 @@ group :development, :test do
   gem "rails-controller-testing"
   gem "sidekiq"
   gem "database_cleaner"
-  # gem "spring"
-  # gem 'database_cleaner-active_record'  
 end
 
 group :development do

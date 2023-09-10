@@ -27,7 +27,6 @@ class Api::V1::AdminsController < ApplicationController
     end
   end
   
-
   def show
     @current_admin
     render 'show', status: :ok
